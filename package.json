@@ -11,7 +11,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "deploy": "git pull && ionic build && firebase deploy",
-    "setup": "npm i -g @ionic/cli firebase-tools && npm i"
+    "setup": "npm i -g @ionic/cli firebase-tools @angular/cli && npm i"
   },
   "private": true,
   "dependencies": {

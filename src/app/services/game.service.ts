@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {AngularFirestore} from '@angular/fire/firestore';
+import {AngularFirestore, DocumentReference} from '@angular/fire/firestore';
 import {firestore} from 'firebase';
 import {Observable} from 'rxjs';
 import {Game} from '../../../types';
@@ -46,13 +46,12 @@ export class GameService {
    * @param gameId
    * @param index
    */
-  async joinGame(gameId: string, index: number): Promise<void> {
+  async joinGame(gameId: string, index: number): Promise<DocumentReference> {
     const userId = await this.authService.getUserId();
-    return this.afs.collection('games')
-        .doc(gameId)
-        .collection('requests')
-        .doc(userId)
-        .set({userId, index});
+    return this.afs.collection('games').doc(gameId).collection('requests').add({
+      userId,
+      index
+    });
   }
 
   /**

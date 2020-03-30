@@ -10,16 +10,16 @@
       {{row}}, {{col}}
     </str-game-tile>
   </div>
-  <div class="team-1-join-button">
+  <div class="team-1-join-button" *ngIf="showButton(0)">
     <ion-button color="danger" (click)="joinTeam(0)">Join</ion-button>
   </div>
-  <div class="team-2-join-button">
+  <div class="team-2-join-button" *ngIf="showButton(1)">
     <ion-button color="primary" (click)="joinTeam(1)">Join</ion-button>
   </div>
-  <div class="team-3-join-button">
+  <div class="team-3-join-button" *ngIf="showButton(2)">
     <ion-button color="success" (click)="joinTeam(2)">Join</ion-button>
   </div>
-  <div class="team-4-join-button">
+  <div class="team-4-join-button" *ngIf="showButton(3)">
     <ion-button color="warning" (click)="joinTeam(3)">Join</ion-button>
   </div>
 </section>

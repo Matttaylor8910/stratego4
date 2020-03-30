@@ -18,6 +18,10 @@ export class BoardComponent {
     return this.game ? this.game.board : undefined;
   }
 
+  showButton(index: number): boolean {
+    return this.board && !this.board.players[index].userId;
+  }
+
   joinTeam(index: number): void {
     this.gameService.joinGame(this.game.id, index);
   }

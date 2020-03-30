@@ -1,0 +1,23 @@
+.home-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+
+  .start-game-container {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+
+    h1 {
+      font-size: 32px;
+    }
+
+    ion-input {
+      text-align: center;
+      border-bottom: 2px solid #ddd;
+      margin-bottom: 20px;
+      font-size: 20px;
+    }
+  }
+}

@@ -1,23 +1,13 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Home</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div style="max-width: 900px; margin:auto" align="center">
+  <section class="home-container">
+    <div class="start-game-container">
+      <h1>Stratego 4</h1>
 
-    <h1>Welcome to Home</h1>
-
-    <ion-card color="#2a4865" style="max-width: 400px">
       <ion-input #gameName placeholder="Custom Game Code"></ion-input>
+
       <ion-button (click)="goToGame(gameName.value)">
         Go to game
       </ion-button>
-    </ion-card>
-
-  </div>
-
-
-
+    </div>
+  </section>
 </ion-content>

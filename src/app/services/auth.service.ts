@@ -2,12 +2,10 @@ import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/auth';
 import {AngularFirestore} from '@angular/fire/firestore';
 import {take} from 'rxjs/operators';
-import {Player} from 'types';
+import {User} from 'types';
 
 import {UtilService} from './util.service';
 
-// NOTE: we refer to players as users in this service to align with the
-// Firestore Auth naming
 @Injectable({providedIn: 'root'})
 export class AuthService {
   authState: firebase.User|null = null;
@@ -170,9 +168,9 @@ export class AuthService {
    * add/update that user's data in Firestore
    */
   private async updateUserData(
-      firebaseUser: firebase.User, additionalInfo?: Partial<Player>) {
+      firebaseUser: firebase.User, additionalInfo?: Partial<User>) {
     const path = `users/${firebaseUser.uid}`;
-    const data: Partial<Player> = {id: firebaseUser.uid};
+    const data: Partial<User> = {id: firebaseUser.uid};
 
     if (firebaseUser.displayName) {
       data.name = firebaseUser.displayName;

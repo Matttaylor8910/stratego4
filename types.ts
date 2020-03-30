@@ -2,66 +2,120 @@
 // can be created by anyone
 // cannot be edited except by server
 export interface Game {
+  id: string;
   name: string;
-  players: string[];  // array of playerIds of those playing
-  scoreboard: Scoreboard;
-  map: Map;
+
+  // this property will change to reflect the different phases as they happen,
+  // obviously non-editable except by server
+  phase?: 'join'|'placement'|'playing'|'complete';
+
+  // generated onCreate by a cloud function, updated by requests
+  // subcollection array of userIds of those playing, used for
+  // querying/permissions only people playing can post to /moves
+  // subcollection
+  userIds?: string[];
+
+  // generated onCreate by a cloud function
+  // includes the score, and the turn counter
+  state?: GameState;
+
+  // generated onCreate by a cloud function, pull the default map for now
+  // the data necessary to render the players colors on the map, excluding the
+  // information about what piece is there
+  map?: Map;
 }
 
-// each tile can emit its own stuff
-// /games/{gameId}/tiles/{tileId}
-
-// /games/{gameId}/positions/{playerId}
-// cannot be edited except by server
+// /games/{gameId}/positions/{userId}
+// users can create (one time at the start)
+// cannot be edited afterward, except by server
+// C - one time
+// R - errybody
+// U - no one but server
+// D - never
 export interface PlayerPosition {
-  playerId: string;
-  piece: Piece;
-  coordinate: Coordinate;
+  userId: string;
+  pieces: {piece: Piece, coordinate: Coordinate}[];
 }
 
 // /games/{gameId}/moves/{docId}
-// only allow create in this collection
+// only allow create in this collection and only if you're in the game
 export interface Move {
   from: Coordinate;
   to: Coordinate;
   piece: Piece;
-  playerId: string;
+  userId: string;
+
+  createdAt: number;
+}
+
+// /games/{gameId}/requests/{docId}
+export interface JoinRequest {
+  userId: string;
+  index: number;
 }
 
 // cannot be edited except by server
-export interface Scoreboard {
-  players: {player: Player, score: number}[];
+export interface GameState {
+  // just a simply score
+  players: {
+    userId: string,
+    score: number,
+  }[];
+
+  // start at 0 (display as + 1)
+  turn: number;
 }
 
-// collection at /maps/{mapId} (we can build more maps later)
-// can be edited by the creator
+// /maps/{mapId} (we can build more maps later)
+// This is just the collection of available maps to choose from when starting a
+// game. Users can create maps and come back later to tweak settings and layout.
+//
+// NOTE: after a map is selected as the map for a game, it just gets copied onto
+// the game document and is edited by the server from then on out to keep one
+// source of truth.
 export interface Map {
+  // Show name in UI for picking maps (later feature)
   name: string;
+
+  // can be any width and height
   width: number;
   height: number;
 
-  // all tiles to be rendered on the map
-  tiles: Tile[];
+  // the visual state of where which tiles the player occupies
+  players: {
+    color: string,              // hex value
+    coordinates: Coordinate[],  // starting positions
+
+    // if userId is not set, then show a play button
+    userId?: string,
+    plase?: 'placement'|'playing'|'eliminated'|'winner',
+  }[];
+
+  // pieces is a map of several shortNames that correspond to the number of that
+  // piece allowed
+  // {
+  //   'S': 1,
+  //   'B': 2,
+  //   'F': 1,
+  //   '2': 3,
+  // }
+  pieces: {[shortName: string]: number};
+
+  // all tiles that cannot be visited when playing
+  offLimits: Coordinate[];
 }
 
-export interface Tile {
-  coordinate: Coordinate;
-  inPlay: boolean;  // set to false to make it a square you cannot move to
-
-  // null is empty
-  playerId: string|null;
-}
-
+// /pieces/{docId}
 export interface Piece {
-  playerId: string;  // the player controlling this unit
-  name: string;      // general, flag, bomb, 2, 3, etc
-  capturePoints: number;
+  name: string;           // General, Flag, Bomb, Spy, 2, 3, etc
+  shortName: string;      // G, F, B, S, 2, 3, etc
+  capturePoints: number;  // increment score by when captured
 }
 
-// collection at /players/{playerId}
-export interface Player {
+// collection at /users/{userId}
+export interface User {
   id: string;
-  name: string;
+  name?: string;
   email?: string;
   photoURL?: string;
 }

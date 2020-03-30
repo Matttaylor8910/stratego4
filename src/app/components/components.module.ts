@@ -6,6 +6,7 @@ import {BoardComponent} from './board/board.component';
 import {ScoreboardComponent} from './scoreboard/scoreboard.component';
 import {TeamPickerComponent} from './team-picker/team-picker.component';
 import {TileComponent} from './tile/tile.component';
+import {GameTileComponent} from './game-tile/game-tile.component';
 
 @NgModule({
   declarations: [
@@ -13,6 +14,7 @@ import {TileComponent} from './tile/tile.component';
     ScoreboardComponent,
     TileComponent,
     TeamPickerComponent,
+    GameTileComponent
   ],
   imports: [
     IonicModule,
@@ -23,6 +25,7 @@ import {TileComponent} from './tile/tile.component';
     ScoreboardComponent,
     TileComponent,
     TeamPickerComponent,
+    GameTileComponent
   ]
 })
 export class ComponentsModule {

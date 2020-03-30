@@ -1,3 +1,13 @@
-<p>
-  board works!
-</p>
+<section class="board-container">
+  <div
+    *ngFor="let item of [].constructor(game.board.height); let row = index"
+  >
+    <str-game-tile
+      *ngFor="let item of [].constructor(game.board.width); let col = index"
+      [color]="getColor(row, col)"
+    >
+      {{row}}, {{col}}
+    </str-game-tile>
+
+  </div>
+</section>

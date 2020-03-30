@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
-import {Map} from 'types';
+import {GameService} from 'src/app/services/game.service';
+import {Game, Map} from 'types';
 
 @Component({
   selector: 'str-board',
@@ -7,13 +8,18 @@ import {Map} from 'types';
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent {
-  @Input() board: Map;
+  @Input() game: Game;
 
-  constructor() {}
+  constructor(
+      private readonly gameService: GameService,
+  ) {}
 
-  joinTeam(teamNum: number): void {
-    console.log('Joining team ' + teamNum);
-    console.log('Add to array at ' + (teamNum - 1));
+  get board(): Map|undefined {
+    return this.game ? this.game.board : undefined;
+  }
+
+  joinTeam(index: number): void {
+    this.gameService.joinGame(this.game.id, index);
   }
 
   // return the hex color for this cell

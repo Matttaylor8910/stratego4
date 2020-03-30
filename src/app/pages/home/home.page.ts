@@ -18,7 +18,7 @@ export class HomePage {
    * @param name
    */
   async createGame(name: string) {
-    const gameId = await this.gameService.createOrJoinGame(name);
+    const gameId = await this.gameService.createOrGetGame(name);
     this.router.navigate(['game', gameId]);
   }
 }

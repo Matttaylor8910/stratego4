@@ -3,12 +3,14 @@ import {AngularFirestore} from '@angular/fire/firestore';
 import {firestore} from 'firebase';
 import {Observable} from 'rxjs';
 import {Game} from '../../../types';
+import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class GameService {
   private db: firestore.Firestore;
 
   constructor(
+      private readonly authService: AuthService,
       private readonly afs: AngularFirestore,
   ) {
     this.db = firestore();
@@ -18,7 +20,7 @@ export class GameService {
    * Create a game and return the id of document
    * @param name
    */
-  async createOrJoinGame(name: string): Promise<string> {
+  async createOrGetGame(name: string): Promise<string> {
     const id = this.createGameId(name);
     const game = await this.db.collection('games').doc(id).get();
 
@@ -37,6 +39,20 @@ export class GameService {
    */
   getGame(id: string): Observable<Game> {
     return this.afs.collection('games').doc<Game>(id).valueChanges();
+  }
+
+  /**
+   * Join a game
+   * @param gameId
+   * @param index
+   */
+  async joinGame(gameId: string, index: number): Promise<void> {
+    const userId = await this.authService.getUserId();
+    return this.afs.collection('games')
+        .doc(gameId)
+        .collection('requests')
+        .doc(userId)
+        .set({userId, index});
   }
 
   /**

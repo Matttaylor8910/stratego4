@@ -4,7 +4,7 @@
       <ion-back-button></ion-back-button>
     </ion-buttons>
     <ion-title *ngIf="game$ | async as game">
-      {{ game.name }} {{ authService.currentUserId }}
+      {{ game.name }}
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -15,7 +15,7 @@
     <ng-container *ngIf="game$ | async as game; else loading">
       <ng-container *ngIf="game.board; else creating">
         <str-board
-          [board]="game.board">
+          [game]="game">
         </str-board>
       </ng-container>
       <ng-template #creating>

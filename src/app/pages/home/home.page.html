@@ -5,11 +5,19 @@
 </ion-header>
 
 <ion-content>
+  <div style="max-width: 900px; margin:auto" align="center">
 
-  <h1>Welcome to Home</h1>
+    <h1>Welcome to Home</h1>
 
-  <ion-button (click)="goToGame()">
-    Go to game
-  </ion-button>
+    <ion-card color="#2a4865" style="max-width: 400px">
+      <ion-input #gameName placeholder="Custom Game Code"></ion-input>
+      <ion-button (click)="goToGame(gameName.value)">
+        Go to game
+      </ion-button>
+    </ion-card>
+
+  </div>
+
+
 
 </ion-content>

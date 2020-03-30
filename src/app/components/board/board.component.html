@@ -1,5 +1,5 @@
 <section class="board-container">
-  <div
+  <div class="map-container"
     *ngFor="let item of [].constructor(game.board.height); let row = index"
   >
     <str-game-tile
@@ -9,4 +9,17 @@
       {{row}}, {{col}}
     </str-game-tile>
   </div>
+  <div class="team-1-join-button">
+    <ion-button color="danger">Join</ion-button>
+  </div>
+  <div class="team-2-join-button">
+    <ion-button color="primary">Join</ion-button>
+  </div>
+  <div class="team-3-join-button">
+    <ion-button color="success">Join</ion-button>
+  </div>
+  <div class="team-4-join-button">
+    <ion-button color="warning">Join</ion-button>
+  </div>
 </section>
+

@@ -11,24 +11,28 @@
   .team-1-join-button {
     position: absolute;
     top: 5%;
-    left: 45%
+    left: 50%;
+    transform: translate(-50%);
   }
 
   .team-2-join-button {
     position: absolute;
-    top: 45%;
+    top: 50%;
+    transform: translateY(-50%);
     left: 5%;
   }
 
   .team-3-join-button {
     position: absolute;
-    top: 45%;
+    top: 50%;
+    transform: translateY(-50%);
     right: 5%;
   }
 
   .team-4-join-button {
     position: absolute;
     bottom: 5%;
-    left: 45%;
+    left: 50%;
+    transform: translate(-50%);
   }
 }

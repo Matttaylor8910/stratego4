@@ -13,9 +13,6 @@
   <section class="centered-container">
     <!-- game is loaded state -->
     <section *ngIf="game$ | async as game; else loading">
-
-      <h1>game page!</h1>
-
       <str-board
         [game]="mockedGame()">
       </str-board>

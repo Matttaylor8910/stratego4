@@ -12,14 +12,18 @@
 <ion-content>
   <section class="centered-container">
     <!-- game is loaded state -->
-    <section *ngIf="game$ | async as game; else loading">
-      <str-board
-        [game]="mockedGame()">
-      </str-board>
+    <ng-container *ngIf="game$ | async as game; else loading">
+      <ng-container *ngIf="game.board; else creating">
+        <str-board
+          [board]="game.board">
+        </str-board>
 
-      <str-scoreboard></str-scoreboard>
-
-    </section>
+        <str-scoreboard></str-scoreboard>
+      </ng-container>
+      <ng-template #creating>
+        <h1>Creating game...</h1>
+      </ng-template>
+    </ng-container>
 
     <!-- loading state -->
     <ng-template #loading>

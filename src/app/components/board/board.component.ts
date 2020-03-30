@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {Game} from 'types';
+import {Map} from 'types';
 
 @Component({
   selector: 'str-board',
@@ -7,13 +7,13 @@ import {Game} from 'types';
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent {
-  @Input() game: Game;
+  @Input() board: Map;
 
   constructor() {}
 
   // return the hex color for this cell
   getColor(row: number, col: number): string {
-    const board = this.game.board;
+    const {board} = this;
     if (board) {
       if (board.offLimits.some(
               offLimitCell =>

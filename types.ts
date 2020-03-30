@@ -34,7 +34,12 @@ export interface Game {
 // D - never
 export interface PlayerPosition {
   userId: string;
-  pieces: {piece: Piece, coordinate: Coordinate}[];
+  pieces: PiecePosition[];
+}
+
+export interface PiecePosition {
+  piece: Piece;
+  coordinate: Coordinate;
 }
 
 // /games/{gameId}/moves/{docId}

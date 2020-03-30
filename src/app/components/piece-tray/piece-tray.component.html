@@ -8,7 +8,7 @@
             'used': piece.isUsed,
             'selected' : piece.id === selectedPiece
           }"
-  (click)="selectPiece(piece.id)"
+  (click)="selectPiece(piece)"
 >
   <ion-label>{{piece.rank}}</ion-label>
 </ion-chip>

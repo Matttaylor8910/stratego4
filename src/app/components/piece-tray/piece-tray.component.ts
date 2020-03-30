@@ -1,5 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Map} from '../../../../types';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+
+import {Map, PiecePosition} from '../../../../types';
+
+interface SelectablePiece {
+  id: number;
+  rank: string;
+  isUsed: boolean;
+}
 
 @Component({
   selector: 'str-piece-tray',
@@ -7,40 +14,36 @@ import {Map} from '../../../../types';
   styleUrls: ['./piece-tray.component.scss'],
 })
 export class PieceTrayComponent implements OnInit {
-
   @Input() board: Map;
-  @Input() startingPieces: {[shortName: string]: number};
-  pieces = [];
+  @Input() startingPieces: PiecePosition[];
+  pieces: SelectablePiece[] = [];
   selectedPiece: number;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.createPieces(this.startingPieces);
   }
 
-  createPieces(startingPieces) {
+  createPieces(startingPieces: PiecePosition[]) {
     let pieceNum = 0;
 
     Object.keys(startingPieces).forEach(key => {
       for (let i = 0; i < startingPieces[key]; i++) {
-        this.pieces.push({
-          id: pieceNum,
-          rank: key,
-          isUsed: false
-        });
+        this.pieces.push({id: pieceNum, rank: key, isUsed: false});
         pieceNum++;
       }
     });
   }
 
-  selectPiece(id: number) {
-    if (this.selectedPiece && this.selectedPiece === id) {
+  selectPiece(piece: SelectablePiece) {
+    if (this.selectedPiece && this.selectedPiece === piece.id) {
       this.selectedPiece = undefined;
     } else {
-      this.selectedPiece = id;
-      // TODO: emit event for selected piece?
+      this.selectedPiece = piece.id;
     }
+
+    // TODO: emit or something here
   }
 
   usePiece(id: number) {

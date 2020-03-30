@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {GameService} from 'src/app/services/game.service';
-import {Game, Map} from 'types';
+import {Game, Map, PlayerPosition} from 'types';
 
 @Component({
   selector: 'str-board',
@@ -9,6 +9,7 @@ import {Game, Map} from 'types';
 })
 export class BoardComponent {
   @Input() game: Game;
+  @Input() position: PlayerPosition;
 
   constructor(
       private readonly gameService: GameService,
@@ -19,7 +20,7 @@ export class BoardComponent {
   }
 
   get gamePhase(): string|undefined {
-    return this.game ?  this.game.phase : undefined;
+    return this.game ? this.game.phase : undefined;
   }
 
   showButton(index: number): boolean {
@@ -37,7 +38,7 @@ export class BoardComponent {
       return;
     }
     if (this.gamePhase === 'placement') {
-     // Highlight and emit?
+      // Highlight and emit?
       // (Places piece if one is selected on piece tray)
       // (Otherwise: Click Piece tray to select both)
     }

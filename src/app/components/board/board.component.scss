@@ -1,6 +1,34 @@
 .board-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
+  position: relative;
+
+  .map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+
+  .team-1-join-button {
+    position: absolute;
+    top: 5%;
+    left: 45%
+  }
+
+  .team-2-join-button {
+    position: absolute;
+    top: 45%;
+    left: 5%;
+  }
+
+  .team-3-join-button {
+    position: absolute;
+    top: 45%;
+    right: 5%;
+  }
+
+  .team-4-join-button {
+    position: absolute;
+    bottom: 5%;
+    left: 45%;
+  }
 }

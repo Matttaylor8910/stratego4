@@ -88,7 +88,7 @@ export interface Map {
 
     // if userId is not set, then show a play button
     userId?: string,
-    plase?: 'placement'|'playing'|'eliminated'|'winner',
+    phase?: 'placement'|'playing'|'eliminated'|'winner',
   }[];
 
   // pieces is a map of several shortNames that correspond to the number of that

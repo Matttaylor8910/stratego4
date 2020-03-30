@@ -4,7 +4,7 @@
   >
     <str-game-tile
       *ngFor="let item of [].constructor(game.board.width); let col = index"
-      [color]="getColor(row, col)"
+      [color]="getTileColor(row, col)"
     >
       {{row}}, {{col}}
     </str-game-tile>

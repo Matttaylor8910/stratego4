@@ -1,7 +1,9 @@
 // collection at /games/{gameId}
-// the game
+// can be created by anyone
+// cannot be edited except by server
 export interface Game {
-  players: String[];  // array of playerIds of those playing
+  name: string;
+  players: string[];  // array of playerIds of those playing
   scoreboard: Scoreboard;
   map: Map;
 }
@@ -12,7 +14,7 @@ export interface Game {
 // /games/{gameId}/positions/{playerId}
 // cannot be edited except by server
 export interface PlayerPosition {
-  playerId: String;
+  playerId: string;
   piece: Piece;
   coordinate: Coordinate;
 }
@@ -23,7 +25,7 @@ export interface Move {
   from: Coordinate;
   to: Coordinate;
   piece: Piece;
-  playerId: String;
+  playerId: string;
 }
 
 // cannot be edited except by server
@@ -34,7 +36,7 @@ export interface Scoreboard {
 // collection at /maps/{mapId} (we can build more maps later)
 // can be edited by the creator
 export interface Map {
-  name: String;
+  name: string;
   width: number;
   height: number;
 
@@ -51,14 +53,17 @@ export interface Tile {
 }
 
 export interface Piece {
-  playerId: String;  // the player controlling this unit
-  name: String;      // general, flag, bomb, 2, 3, etc
+  playerId: string;  // the player controlling this unit
+  name: string;      // general, flag, bomb, 2, 3, etc
   capturePoints: number;
 }
 
 // collection at /players/{playerId}
 export interface Player {
-  name: String;
+  id: string;
+  name: string;
+  email?: string;
+  photoURL?: string;
 }
 
 

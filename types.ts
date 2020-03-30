@@ -22,7 +22,7 @@ export interface Game {
   // generated onCreate by a cloud function, pull the default map for now
   // the data necessary to render the players colors on the map, excluding the
   // information about what piece is there
-  map?: Map;
+  board?: Map;
 }
 
 // /games/{gameId}/positions/{userId}

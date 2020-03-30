@@ -18,12 +18,36 @@ export class BoardComponent {
     return this.game ? this.game.board : undefined;
   }
 
+  get gamePhase(): string|undefined {
+    return this.game ?  this.game.phase : undefined;
+  }
+
   showButton(index: number): boolean {
     return this.board && !this.board.players[index].userId;
   }
 
   joinTeam(index: number): void {
     this.gameService.joinGame(this.game.id, index);
+  }
+
+  clickGameTile(row: number, col: number) {
+    console.log('Clicked game tile. row: ' + row + ' col: ' + col);
+    console.log(this.gamePhase);
+    if (this.gamePhase === 'join' || this.gamePhase === 'complete') {
+      return;
+    }
+    if (this.gamePhase === 'placement') {
+     // Highlight and emit?
+      // (Places piece if one is selected on piece tray)
+      // (Otherwise: Click Piece tray to select both)
+    }
+
+    if (this.gamePhase === 'playing') {
+      // Highlight if it is your piece
+      // (Then click on a new game tile to move)
+    }
+
+    // Depending on the phase of the game, this might do many things??
   }
 
   // return the hex color for this cell

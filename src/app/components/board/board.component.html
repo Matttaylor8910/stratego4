@@ -6,6 +6,7 @@
     <str-game-tile
       *ngFor="let item of [].constructor(board.width); let col = index"
       [color]="getTileColor(row, col)"
+      (click)="clickGameTile(row, col)"
     >
       {{row}}, {{col}}
     </str-game-tile>
@@ -23,4 +24,3 @@
     <ion-button color="warning" (click)="joinTeam(3)">Join</ion-button>
   </div>
 </section>
-

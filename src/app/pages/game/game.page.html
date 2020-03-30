@@ -17,6 +17,13 @@
         <str-board
           [game]="game">
         </str-board>
+        <div class="break"></div>
+        <str-piece-tray
+          *ngIf="game.phase === 'placement'"
+          [startingPieces]="game.board.pieces"
+        >
+        </str-piece-tray>
+
       </ng-container>
       <ng-template #creating>
         <h1>Creating game...</h1>

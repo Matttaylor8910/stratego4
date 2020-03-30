@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import {Component} from '@angular/core';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
   styleUrls: ['./home.page.scss'],
 })
-export class HomePage implements OnInit {
+export class HomePage {
+  constructor(
+      private readonly router: Router,
+  ) {}
 
-  constructor() { }
-
-  ngOnInit() {
+  goToGame() {
+    this.router.navigate(['game', 'matt-id']);
   }
-
 }

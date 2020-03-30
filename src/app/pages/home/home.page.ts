@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
+import {GameService} from 'src/app/services/game.service';
 
 @Component({
   selector: 'app-home',
@@ -9,14 +10,15 @@ import {Router} from '@angular/router';
 export class HomePage {
   constructor(
       private readonly router: Router,
+      private readonly gameService: GameService,
   ) {}
 
-  goToGame(value) {
-    console.log('Go To Game: ' + value);
-    value = value.toLowerCase();
-    value = value.replace(/[^a-zA-Z0-9 ]/g, '');  // remove illegal values
-    value = value.replace(/[ ]/g, '-');  // spaces to dashes
-    console.log('gameCode: ' + value);
-    this.router.navigate(['game', value]);
+  /**
+   * Create a game or join an existing one and route to that id
+   * @param name
+   */
+  async createGame(name: string) {
+    const gameId = await this.gameService.createOrJoinGame(name);
+    this.router.navigate(['game', gameId]);
   }
 }

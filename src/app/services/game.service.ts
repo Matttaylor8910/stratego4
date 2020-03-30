@@ -1,14 +1,51 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Game} from 'types';
+import {firestore} from 'firebase';
+import {Observable} from 'rxjs';
+import {Game} from '../../../types';
 
 @Injectable({providedIn: 'root'})
 export class GameService {
+  private db: firestore.Firestore;
+
   constructor(
       private readonly afs: AngularFirestore,
-  ) {}
+  ) {
+    this.db = firestore();
+  }
 
-  createGame(game: Game) {
-    return this.afs.collection('games').doc(game.name).set(game);
+  /**
+   * Create a game and return the id of document
+   * @param name
+   */
+  async createOrJoinGame(name: string): Promise<string> {
+    const id = this.createGameId(name);
+    const game = await this.db.collection('games').doc(id).get();
+
+    // if the game doesn't exist, create it
+    if (!game.exists) {
+      await this.afs.collection('games').doc(id).set({id, name});
+    }
+
+    // return the doc id
+    return id;
+  }
+
+  /**
+   * Return a game
+   * @param id
+   */
+  getGame(id: string): Observable<Game> {
+    return this.afs.collection('games').doc<Game>(id).valueChanges();
+  }
+
+  /**
+   * "Suh dude!" turns into "suh-dude"
+   * @param name
+   */
+  private createGameId(name: string): string {
+    return name.toLowerCase()
+        .replace(/[^a-zA-Z0-9 ]/g, '')  // remove illegal values
+        .replace(/[ ]/g, '-');          // spaces to dashes
   }
 }

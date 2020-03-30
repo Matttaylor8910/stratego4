@@ -11,6 +11,11 @@ export class BoardComponent {
 
   constructor() {}
 
+  joinTeam(teamNum: number): void {
+    console.log('Joining team ' + teamNum);
+    console.log('Add to array at ' + (teamNum - 1));
+  }
+
   // return the hex color for this cell
   getTileColor(row: number, col: number): string {
     const board = this.game.board;

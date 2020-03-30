@@ -11,4 +11,8 @@
   max-height: 3rem;
   max-width: 3rem;
   border: 1px solid black;
+
+  &.selected {
+    border-color: pink;
+  }
 }

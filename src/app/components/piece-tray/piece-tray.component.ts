@@ -1,12 +1,7 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
+import {PlacementService} from 'src/app/services/placement.service';
 
 import {Map, PiecePosition} from '../../../../types';
-
-interface SelectablePiece {
-  id: number;
-  rank: string;
-  isUsed: boolean;
-}
 
 @Component({
   selector: 'str-piece-tray',
@@ -14,40 +9,28 @@ interface SelectablePiece {
   styleUrls: ['./piece-tray.component.scss'],
 })
 export class PieceTrayComponent implements OnInit {
-  @Input() board: Map;
   @Input() startingPieces: PiecePosition[];
-  pieces: SelectablePiece[] = [];
-  selectedPiece: number;
 
-  constructor() {}
+  constructor(
+      public readonly placementService: PlacementService,
+  ) {}
 
   ngOnInit() {
     this.createPieces(this.startingPieces);
   }
 
+  // boostrap the placement service
   createPieces(startingPieces: PiecePosition[]) {
+    const pieces = [];
     let pieceNum = 0;
 
     Object.keys(startingPieces).forEach(key => {
       for (let i = 0; i < startingPieces[key]; i++) {
-        this.pieces.push({id: pieceNum, rank: key, isUsed: false});
+        pieces.push({id: pieceNum, rank: key, isUsed: false});
         pieceNum++;
       }
     });
-  }
 
-  selectPiece(piece: SelectablePiece) {
-    if (this.selectedPiece && this.selectedPiece === piece.id) {
-      this.selectedPiece = undefined;
-    } else {
-      this.selectedPiece = piece.id;
-    }
-
-    // TODO: emit or something here
-  }
-
-  usePiece(id: number) {
-    const foundPiece = this.pieces.find(piece => piece.id === id);
-    foundPiece.isUsed = !foundPiece.isUsed;
+    this.placementService.setPieces(pieces);
   }
 }

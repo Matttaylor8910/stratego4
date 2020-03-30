@@ -1,6 +1,8 @@
 <section
   class="game-tile-container"
-  [style.background-color]="color"
+  [class.selected]="selected"
+  [style.background-color]="tileColor"
+  (click)="clickGameTile()"
 >
   <ng-content></ng-content>
 </section>

@@ -1,16 +1,14 @@
 <div
-  *ngIf="startingPieces"
+  *ngIf="placementService.pieces"
   class="centered-container piece-tray-container"
 >
-
-<ion-chip *ngFor="let piece of pieces"
-          [ngClass]="{
-            'used': piece.isUsed,
-            'selected' : piece.id === selectedPiece
-          }"
-  (click)="selectPiece(piece)"
->
-  <ion-label>{{piece.rank}}</ion-label>
-</ion-chip>
-
+  <ion-chip *ngFor="let piece of placementService.pieces"
+            [ngClass]="{
+              'used': piece.isUsed,
+              'selected' : piece.id === placementService.selectedPiece
+            }"
+    (click)="placementService.selectPiece(piece)"
+  >
+    <ion-label>{{piece.rank}}</ion-label>
+  </ion-chip>
 </div>

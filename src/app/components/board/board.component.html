@@ -5,8 +5,9 @@
   >
     <str-game-tile
       *ngFor="let item of [].constructor(board.width); let col = index"
-      [color]="getTileColor(row, col)"
-      (click)="clickGameTile(row, col)"
+      [game]="game"
+      [row]="row"
+      [col]="col"
     >
       {{row}}, {{col}}
     </str-game-tile>

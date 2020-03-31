@@ -28,9 +28,8 @@
 // flex center things
 .centered-container {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  height: 100%;
+  min-height: 100%;
 }

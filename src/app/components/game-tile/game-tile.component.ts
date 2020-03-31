@@ -19,6 +19,17 @@ export class GameTileComponent {
       private readonly authService: AuthService,
   ) {}
 
+  get width(): string {
+    let max = 48;
+    if (this.board) {
+      const split = window.innerWidth / this.board.width;
+      if (split < max) {
+        max = Math.floor(split);
+      }
+    }
+    return `${max}px`;
+  }
+
   get selectable(): boolean {
     if (this.currentPlayer) {
       return this.currentPlayer.coordinates.hasOwnProperty(
@@ -28,7 +39,9 @@ export class GameTileComponent {
   }
 
   get currentPlayer() {
-    if (!this.game || !this.game.board) { return null; }
+    if (!this.board) {
+      return null;
+    }
     return this.game.board.players.find(
         p => p.userId === this.authService.currentUserId);
   }

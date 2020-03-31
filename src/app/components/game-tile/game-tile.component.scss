@@ -1,18 +1,19 @@
 
 .game-tile-container {
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
 
-  font-size: 0.75rem;
+  font-size: 20px;
   padding: 2px;
   min-height: 3rem;
   min-width: 3rem;
   max-height: 3rem;
   max-width: 3rem;
   border: 1px solid black;
+  opacity: .5;
 
   &.selected {
-    border-color: pink;
+    opacity: 1;
   }
 }

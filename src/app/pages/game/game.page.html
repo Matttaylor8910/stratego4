@@ -15,12 +15,13 @@
     <ng-container *ngIf="game$ | async as game; else loading">
       <ng-container *ngIf="game.board; else creating">
         <str-board
-          [game]="game">
+          [game]="game"
+          [position]="position(game)">
         </str-board>
         <div class="break"></div>
         <str-piece-tray
           *ngIf="game.phase === 'placement'"
-          [startingPieces]="game.board.pieces"
+          [game]="game"
         >
         </str-piece-tray>
 

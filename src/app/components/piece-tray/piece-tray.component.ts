@@ -1,7 +1,8 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PlacementService} from 'src/app/services/placement.service';
+import {Game, PiecesMap} from 'types';
 
-import {Map, PiecePosition} from '../../../../types';
+
 
 @Component({
   selector: 'str-piece-tray',
@@ -9,28 +10,33 @@ import {Map, PiecePosition} from '../../../../types';
   styleUrls: ['./piece-tray.component.scss'],
 })
 export class PieceTrayComponent implements OnInit {
-  @Input() startingPieces: PiecePosition[];
+  @Input() game: Game;
+
+  saved = false;
 
   constructor(
       public readonly placementService: PlacementService,
   ) {}
 
   ngOnInit() {
-    this.createPieces(this.startingPieces);
+    this.createPieces(this.game.board!.pieces);
   }
 
   // boostrap the placement service
-  createPieces(startingPieces: PiecePosition[]) {
+  createPieces(startingPieces: PiecesMap) {
     const pieces = [];
-    let pieceNum = 0;
 
     Object.keys(startingPieces).forEach(key => {
       for (let i = 0; i < startingPieces[key]; i++) {
-        pieces.push({id: pieceNum, rank: key, isUsed: false});
-        pieceNum++;
+        pieces.push(key);
       }
     });
 
     this.placementService.setPieces(pieces);
+  }
+
+  savePosition() {
+    this.saved = true;
+    this.placementService.createPlayerPosition(this.game.id)
   }
 }

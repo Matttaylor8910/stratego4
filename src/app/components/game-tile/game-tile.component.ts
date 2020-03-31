@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {PlacementService} from 'src/app/services/placement.service';
-import {Game, Map} from 'types';
+import {Game, Map, PlayerPosition} from 'types';
 
 @Component({
   selector: 'str-game-tile',
@@ -9,6 +9,7 @@ import {Game, Map} from 'types';
 })
 export class GameTileComponent {
   @Input() game: Game;
+  @Input() position: PlayerPosition;
   @Input() row: number;
   @Input() col: number;
 
@@ -19,6 +20,16 @@ export class GameTileComponent {
   get disabled(): boolean {
     // TODO: disable tiles that aren't yours
     return false;
+  }
+
+  get label(): string {
+    if (this.position) {
+      const rank = this.position[`${this.row},${this.col}`];
+      if (rank) {
+        return rank;
+      }
+    }
+    return '';
   }
 
   get selected(): boolean {

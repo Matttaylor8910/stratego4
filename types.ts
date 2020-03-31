@@ -33,13 +33,8 @@ export interface Game {
 // U - no one but server
 // D - never
 export interface PlayerPosition {
-  userId: string;
-  pieces: PiecePosition[];
-}
-
-export interface PiecePosition {
-  piece: Piece;
-  coordinate: Coordinate;
+  // '3,4': 'S' for example to denote the spy is at row 3, col 4
+  [coordinate: string]: string;
 }
 
 // /games/{gameId}/moves/{docId}
@@ -47,9 +42,8 @@ export interface PiecePosition {
 export interface Move {
   from: Coordinate;
   to: Coordinate;
-  piece: Piece;
+  rank: string;
   userId: string;
-
   createdAt: number;
 }
 
@@ -96,26 +90,30 @@ export interface Map {
     phase?: 'placement'|'playing'|'eliminated'|'winner',
   }[];
 
-  // pieces is a map of several shortNames that correspond to the number of that
-  // piece allowed
-  // {
-  //   'S': 1,
-  //   'B': 2,
-  //   'F': 1,
-  //   '2': 3,
-  // }
-  pieces: {[shortName: string]: number};
+  pieces: PiecesMap;
 
   // all tiles that cannot be visited when playing
   offLimits: Coordinate[];
 }
 
-// /pieces/{docId}
-export interface Piece {
-  name: string;           // General, Flag, Bomb, Spy, 2, 3, etc
-  shortName: string;      // G, F, B, S, 2, 3, etc
-  capturePoints: number;  // increment score by when captured
+// pieces is a map of several shortNames that correspond to the number of that
+// piece allowed
+// {
+//   'S': 1,
+//   'B': 2,
+//   'F': 1,
+//   '2': 3,
+// }
+export interface PiecesMap {
+  [rank: string]: number;
 }
+
+// /pieces/{docId}
+// export interface Piece {
+//   name: string;           // General, Flag, Bomb, Spy, 2, 3, etc
+//   shortName: string;      // G, F, B, S, 2, 3, etc
+//   capturePoints: number;  // increment score by when captured
+// }
 
 // collection at /users/{userId}
 export interface User {

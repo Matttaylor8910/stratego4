@@ -1,11 +1,11 @@
 .piece-tray-container {
-  width: 50%;
-  margin: auto;
-  .used {
-    opacity: 20%;
-  }
-
   .selected {
     background-color: #feff31;
+  }
+
+  .disabled {
+    opacity: .5;
+    pointer-events: none;
+    cursor: default;
   }
 }

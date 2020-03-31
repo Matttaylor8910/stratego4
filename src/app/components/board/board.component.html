@@ -6,10 +6,9 @@
     <str-game-tile
       *ngFor="let item of [].constructor(board.width); let col = index"
       [game]="game"
+      [position]="position"
       [row]="row"
-      [col]="col"
-    >
-      {{row}}, {{col}}
+      [col]="col">
     </str-game-tile>
   </div>
   <div class="team-1-join-button" *ngIf="showButton(0)">

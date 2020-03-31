@@ -1,38 +1,40 @@
 import {Injectable} from '@angular/core';
-import {Coordinate} from 'types';
+import {AngularFirestore} from '@angular/fire/firestore';
+import {Coordinate, PlayerPosition} from 'types';
 
-export interface SelectablePiece {
-  id: number;
-  rank: string;
-  isUsed: boolean;
-}
+import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class PlacementService {
-  pieces: SelectablePiece[] = [];
+  pieces: string[] = [];
 
-  selectedPiece: number;
+  selectedPieceIndex: number;
   selectedCell: Coordinate;
 
-  constructor() {}
+  position: PlayerPosition = {};
 
-  setPieces(pieces: SelectablePiece[]) {
+  constructor(
+      private readonly afs: AngularFirestore,
+      private readonly authService: AuthService,
+  ) {}
+
+  setPieces(pieces: string[]) {
     this.pieces = pieces;
   }
 
-  selectPiece(piece: SelectablePiece) {
-    console.log('piece', piece);
-    if (this.selectedPiece && this.selectedPiece === piece.id) {
-      this.selectedPiece = undefined;
+  selectPiece(index: number) {
+    if (this.selectedPieceIndex === index) {
+      this.selectedPieceIndex = undefined;
     } else {
-      this.selectedPiece = piece.id;
+      this.selectedPieceIndex = index;
     }
     this.assignPieceIfNecessary();
   }
 
   selectCell(coordinate: Coordinate) {
-    console.log('coordinate', coordinate);
-    if (this.selectedCell && this.selectedCell === coordinate) {
+    const {row: row1, col: col1} = coordinate;
+    const {row: row2, col: col2} = this.selectedCell || {};
+    if (row1 === row2 && col1 === col2) {
       this.selectedCell = undefined;
     } else {
       this.selectedCell = coordinate;
@@ -41,6 +43,38 @@ export class PlacementService {
   }
 
   assignPieceIfNecessary() {
-    console.log(this.selectedCell, this.selectedPiece);
+    if (this.selectedCell && this.selectedPieceIndex !== undefined) {
+      // add the piece into the position map
+      const {row, col} = this.selectedCell;
+      const key = `${row},${col}`;
+
+      // remove the piece from the available options
+      const piece = this.pieces.splice(this.selectedPieceIndex, 1)[0];
+
+      // if there was already a piece at this position make it available again
+      const old = this.position[key];
+      if (old) {
+        this.pieces.push(old);
+        this.pieces.sort();
+      }
+
+      // then put the new piece in it's place
+      this.position[key] = piece;
+
+      // clear the selections
+      this.selectedPieceIndex = undefined;
+      this.selectedCell = undefined;
+    }
+  }
+  /**
+   * Add the current position to the database for a given game
+   * @param gameId
+   */
+  createPlayerPosition(gameId: string) {
+    return this.afs.collection('games')
+        .doc(gameId)
+        .collection('positions')
+        .doc(this.authService.currentUserId)
+        .set(this.position);
   }
 }

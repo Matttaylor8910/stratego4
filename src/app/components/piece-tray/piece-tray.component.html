@@ -1,14 +1,34 @@
 <div
   *ngIf="placementService.pieces"
-  class="centered-container piece-tray-container"
+  class="piece-tray-container"
 >
-  <ion-chip *ngFor="let piece of placementService.pieces"
-            [ngClass]="{
-              'used': piece.isUsed,
-              'selected' : piece.id === placementService.selectedPiece
-            }"
-    (click)="placementService.selectPiece(piece)"
-  >
-    <ion-label>{{piece.rank}}</ion-label>
-  </ion-chip>
+  <ng-container *ngIf="!saved; else waiting">
+    <ion-chip
+      *ngFor="let piece of placementService.pieces; let index = index"
+      [class.selected]="index === placementService.selectedPieceIndex"
+      (click)="placementService.selectPiece(index)"
+    >
+      <ion-label>{{ piece }}</ion-label>
+    </ion-chip>
+
+    <ion-chip
+      color="primary"
+      [class.disabled]="!placementService.selectedCell"
+      (click)="placementService.selectPiece(placementService.pieces.length)"
+    >
+      Clear
+    </ion-chip>
+
+    <ion-chip
+      color="success"
+      [class.disabled]="placementService.pieces.length > 0"
+      (click)="savePosition()"
+    >
+      Save
+    </ion-chip>
+  </ng-container>
+
+  <ng-template #waiting>
+    Waiting for others to place pieces...
+  </ng-template>
 </div>

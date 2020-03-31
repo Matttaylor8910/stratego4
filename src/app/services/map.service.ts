@@ -21,7 +21,7 @@ export class MapService {
       players: [
         {
           // red
-          color: '#EECDCD',
+          color: '#ec9d9d',
           coordinates: [
             {row: 0, col: 4},
             {row: 0, col: 5},
@@ -45,7 +45,7 @@ export class MapService {
         },
         {
           // blue
-          color: '#CCDAF5',
+          color: '#8daff1',
           coordinates: [
             {row: 4, col: 0},
             {row: 4, col: 1},
@@ -69,7 +69,7 @@ export class MapService {
         },
         {
           // green
-          color: '#DCE9D5',
+          color: '#9cd27f',
           coordinates: [
             {row: 4, col: 10},
             {row: 4, col: 11},
@@ -93,7 +93,7 @@ export class MapService {
         },
         {
           // yellow
-          color: '#FDF2D0',
+          color: '#ffdf7b',
           coordinates: [
             {row: 9, col: 5},
             {row: 9, col: 6},

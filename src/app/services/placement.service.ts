@@ -33,7 +33,7 @@ export class PlacementService {
 
   selectCell(coordinate: Coordinate) {
     const {row: row1, col: col1} = coordinate;
-    const {row: row2, col: col2} = this.selectedCell || {};
+    const {row: row2 = -1, col: col2 = -1} = this.selectedCell || {};
     if (row1 === row2 && col1 === col2) {
       this.selectedCell = undefined;
     } else {
@@ -68,7 +68,6 @@ export class PlacementService {
   }
   /**
    * Add the current position to the database for a given game
-   * @param gameId
    */
   createPlayerPosition(gameId: string) {
     return this.afs.collection('games')

@@ -21,7 +21,6 @@ export class GameService {
 
   /**
    * Create a game and return the id of document
-   * @param name
    */
   async createOrGetGame(name: string): Promise<string> {
     const id = this.createGameId(name);
@@ -37,19 +36,21 @@ export class GameService {
   }
 
   /**
-   * Return a game
-   * @param id
+   * Return a game for a given doc id
    */
   getGame(id: string): Observable<Game> {
     return this.afs.collection('games').doc<Game>(id).snapshotChanges().pipe(
         map(action => {
           const game = action.payload.data();
 
+          // map the userId onto the tiles that user controls
           if (game.board) {
             game.board.players.forEach(player => {
-              Object.keys(player.coordinates).forEach(key => {
-                player.coordinates[key] = player.userId;
-              });
+              if (player.userId) {
+                Object.keys(player.coordinates).forEach(key => {
+                  player.coordinates[key] = player.userId;
+                });
+              }
             });
           }
 
@@ -59,8 +60,6 @@ export class GameService {
 
   /**
    * Join a game
-   * @param gameId
-   * @param index
    */
   async joinGame(gameId: string, index: number): Promise<DocumentReference> {
     const userId = await this.authService.getUserId();
@@ -72,7 +71,6 @@ export class GameService {
 
   /**
    * "Suh dude!" turns into "suh-dude"
-   * @param name
    */
   private createGameId(name: string): string {
     return name.toLowerCase()

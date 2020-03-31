@@ -20,7 +20,9 @@ export class PieceTrayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.createPieces(this.game.board!.pieces);
+    if (this.game.board) {
+      this.createPieces(this.game.board.pieces);
+    }
   }
 
   get done(): boolean {
@@ -42,6 +44,6 @@ export class PieceTrayComponent implements OnInit {
 
   savePosition() {
     this.saved = true;
-    this.placementService.createPlayerPosition(this.game.id)
+    this.placementService.createPlayerPosition(this.game.id);
   }
 }

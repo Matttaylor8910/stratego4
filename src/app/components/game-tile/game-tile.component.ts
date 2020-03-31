@@ -22,13 +22,13 @@ export class GameTileComponent {
   get selectable(): boolean {
     if (this.currentPlayer) {
       return this.currentPlayer.coordinates.hasOwnProperty(
-          `${this.row},${this.col}`)
+          `${this.row},${this.col}`);
     }
     return false;
   }
 
   get currentPlayer() {
-    if (!this.game || !this.game.board) return null;
+    if (!this.game || !this.game.board) { return null; }
     return this.game.board.players.find(
         p => p.userId === this.authService.currentUserId);
   }

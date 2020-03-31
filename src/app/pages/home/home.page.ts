@@ -19,7 +19,6 @@ export class HomePage {
 
   /**
    * Create a game or join an existing one and route to that id
-   * @param name
    */
   async createGame(name: string) {
     if (name) {

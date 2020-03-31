@@ -1,17 +1,70 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-
-    // This rule allows anyone on the internet to view, edit, and delete
-    // all data in your Firestore database. It is useful for getting
-    // started, but it is configured to expire after 30 days because it
-    // leaves your app open to attackers. At that time, all client
-    // requests to your Firestore database will be denied.
-    //
-    // Make sure to write security rules for your app before that time, or else
-    // your app will lose access to your Firestore database
     match /{document=**} {
-      allow read, write: if request.time < timestamp.date(2020, 4, 29);
+      allow read, write: if true;
     }
   }
 }
+
+// TODO: implement some better rules like below
+// rules_version = '2';
+// service cloud.firestore {
+//   match /databases/{database}/documents {
+//     // TODO: once all rules have been laid out, this can be default
+//     match /{document=**} {
+//       allow read, write: if false;
+//     }
+
+//     match /users/{document=**} {
+//       // Allow reading/writing to your own user doc
+//       allow read, write: if request.auth.uid == request.resource.id;
+//     }
+
+//     match /maps/{document=**} {
+//       // Anyone can read the maps
+//       allow read: if true;
+//       // Edits to the maps are not allowed
+//       allow write: if false;
+//     }
+
+//     match /games/{game} {
+//       // Games can be read and created by anyone
+//       allow read, create: if true;
+//       // For now, no one can update or delete a game
+//       allow update, delete: if false;
+
+//       match /{collection}/{document=**} {
+//         // Don't allow anyone to write to collections by default
+//         allow read, write: if false;
+//       }
+
+//       match /positions/{document=**} {
+//         // Users can read their own positions
+//         allow read: if request.auth.uid == request.resource.id;
+//         // Only users that are in the game can create their position
+//         allow create: if isInGame() && request.auth.uid == request.resource.id;
+//         // No user is allowed to update or delete their position once it has been set
+//         allow update, delete: if false;
+//       }
+
+//       match /requests/{document=**} {
+//         // Users can request to join a game
+//         allow read: if false;
+//         allow write: if authed();
+//       }
+
+//       function isInGame() {
+//         return authed() && request.auth.id in usersInGame();
+//       }
+
+//       function usersInGame() {
+//         return get(/databases/$(database)/documents/games/$(game)).data.userIds;
+//       }
+//     }
+//   }
+// }
+
+// function authed() {
+//   return request.auth != null && request.auth.uid != null;
+// }

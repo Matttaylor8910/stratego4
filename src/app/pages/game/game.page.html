@@ -16,13 +16,12 @@
       <ng-container *ngIf="game.board; else creating">
         <str-board
           [game]="game"
-          [position]="position(game)">
+          [position]="position">
         </str-board>
-        <div class="break"></div>
         <str-piece-tray
           *ngIf="game.phase === 'placement'"
           [game]="game"
-        >
+          [position]="playerPosition">
         </str-piece-tray>
 
       </ng-container>

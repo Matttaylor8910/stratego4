@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {PlacementService} from 'src/app/services/placement.service';
-import {Game, PiecesMap} from 'types';
+import {Game, PiecesMap, PlayerPosition} from 'types';
 
 
 
@@ -11,6 +11,7 @@ import {Game, PiecesMap} from 'types';
 })
 export class PieceTrayComponent implements OnInit {
   @Input() game: Game;
+  @Input() position: PlayerPosition;
 
   saved = false;
 
@@ -20,6 +21,10 @@ export class PieceTrayComponent implements OnInit {
 
   ngOnInit() {
     this.createPieces(this.game.board!.pieces);
+  }
+
+  get done(): boolean {
+    return this.saved || this.position !== undefined;
   }
 
   // boostrap the placement service

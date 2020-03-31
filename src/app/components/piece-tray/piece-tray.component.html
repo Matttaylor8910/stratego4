@@ -2,7 +2,7 @@
   *ngIf="placementService.pieces"
   class="piece-tray-container"
 >
-  <ng-container *ngIf="!saved; else waiting">
+  <ng-container *ngIf="!done; else waiting">
     <ion-chip
       *ngFor="let piece of placementService.pieces; let index = index"
       [class.selected]="index === placementService.selectedPieceIndex"
@@ -11,21 +11,23 @@
       <ion-label>{{ piece }}</ion-label>
     </ion-chip>
 
-    <ion-chip
-      color="primary"
-      [class.disabled]="!placementService.selectedCell"
-      (click)="placementService.selectPiece(placementService.pieces.length)"
-    >
-      Clear
-    </ion-chip>
+    <div class="buttons-container">
+      <ion-button
+        color="primary"
+        [disabled]="!placementService.selectedCell"
+        (click)="placementService.selectPiece(placementService.pieces.length)"
+      >
+        Clear
+      </ion-button>
 
-    <ion-chip
-      color="success"
-      [class.disabled]="placementService.pieces.length > 0"
-      (click)="savePosition()"
-    >
-      Save
-    </ion-chip>
+      <ion-button
+        color="success"
+        [disabled]="placementService.pieces.length > 0"
+        (click)="savePosition()"
+      >
+        Save
+      </ion-button>
+    </div>
   </ng-container>
 
   <ng-template #waiting>

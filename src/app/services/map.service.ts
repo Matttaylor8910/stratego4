@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentReference} from '@angular/fire/firestore';
-import {Map} from 'types';
+import {Map, Piece} from 'types';
 
 @Injectable({providedIn: 'root'})
 export class MapService {
@@ -117,15 +117,15 @@ export class MapService {
         },
       ],
       pieces: {
-        F: 1,
-        B: 2,
-        S: 1,
-        G: 1,
-        6: 1,
-        5: 2,
-        4: 3,
-        3: 3,
-        2: 4,
+        [Piece.FLAG]: 1,
+        [Piece.BOMB]: 2,
+        [Piece.SPY]: 1,
+        [Piece.GENERAL]: 1,
+        [Piece.SIX]: 1,
+        [Piece.FIVE]: 2,
+        [Piece.FOUR]: 3,
+        [Piece.THREE]: 3,
+        [Piece.TWO]: 4,
       },
       offLimits: {
         // top left

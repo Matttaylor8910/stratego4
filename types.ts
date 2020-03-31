@@ -1,3 +1,15 @@
+export enum Piece {
+  GENERAL = '🎖',
+  SPY = '🕵️‍♂️',
+  FLAG = '🏁',
+  BOMB = '💣',
+  TWO = '2️⃣',
+  THREE = '3️⃣',
+  FOUR = '4️⃣',
+  FIVE = '5️⃣',
+  SIX = '6️⃣'
+}
+
 // collection at /games/{gameId}
 // can be created by anyone
 // cannot be edited except by server
@@ -105,9 +117,10 @@ export interface CoordinateMap {
 // pieces is a map of several shortNames that correspond to the number of that
 // piece allowed
 // {
-//   'S': 1,
-//   'B': 2,
-//   'F': 1,
+//   '🎖': 1
+//   '🕵️‍♂️': 1,
+//   '💣': 2,
+//   '🏴': 1,
 //   '2': 3,
 // }
 export interface PiecesMap {

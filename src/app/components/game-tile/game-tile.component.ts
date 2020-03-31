@@ -1,4 +1,5 @@
 import {Component, Input} from '@angular/core';
+import {AuthService} from 'src/app/services/auth.service';
 import {PlacementService} from 'src/app/services/placement.service';
 import {Game, Map, PlayerPosition} from 'types';
 
@@ -15,11 +16,21 @@ export class GameTileComponent {
 
   constructor(
       public readonly placementService: PlacementService,
+      private readonly authService: AuthService,
   ) {}
 
-  get disabled(): boolean {
-    // TODO: disable tiles that aren't yours
+  get selectable(): boolean {
+    if (this.currentPlayer) {
+      return this.currentPlayer.coordinates.hasOwnProperty(
+          `${this.row},${this.col}`)
+    }
     return false;
+  }
+
+  get currentPlayer() {
+    if (!this.game || !this.game.board) return null;
+    return this.game.board.players.find(
+        p => p.userId === this.authService.currentUserId);
   }
 
   get label(): string {

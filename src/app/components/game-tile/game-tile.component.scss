@@ -10,10 +10,20 @@
   min-width: 3rem;
   max-height: 3rem;
   max-width: 3rem;
-  border: 1px solid black;
-  opacity: .5;
+  border: 1px solid #333;
+  pointer-events: none;
 
   &.selected {
-    opacity: 1;
+    border: 3px solid #333;
+    opacity: 1 !important;
+  }
+
+  &.selectable {
+    cursor: pointer;
+    pointer-events: initial;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 }

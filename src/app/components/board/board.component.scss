@@ -1,6 +1,7 @@
 #board {
   position: relative;
   transition: all 1s ease-out;
+  border: 1px solid #000;
 
   .map-container {
     display: flex;

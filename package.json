@@ -10,7 +10,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "git pull && ionic build && firebase deploy",
+    "pull": "git pull && npm i && cd functions && npm i && cd ..",
+    "deploy": "npm run pull && ionic build && firebase deploy",
     "setup": "npm i -g @ionic/cli firebase-tools @angular/cli && npm i"
   },
   "private": true,

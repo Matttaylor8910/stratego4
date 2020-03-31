@@ -33,18 +33,27 @@ export class GamePage implements OnDestroy {
     this.getUserPosition();
   }
 
+  /**
+   * Subscribe to the user's position to layover the board
+   */
   async getUserPosition() {
     const position$ = await this.playerService.getPlayerPosition(this.gameId);
     position$.pipe(takeUntil(this.destroyed$)).subscribe(position => {
       this.playerPosition = position;
-      console.log(position);
     });
   }
 
+  /**
+   * Return either the placement service position when in the placement phase or
+   * the player position whenever that is set
+   */
   get position(): PlayerPosition {
     return this.playerPosition || this.placementService.position;
   }
 
+  /**
+   * Clean up subscriptions
+   */
   ngOnDestroy() {
     this.destroyed$.next();
   }

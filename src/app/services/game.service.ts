@@ -2,7 +2,10 @@ import {Injectable} from '@angular/core';
 import {AngularFirestore, DocumentReference} from '@angular/fire/firestore';
 import {firestore} from 'firebase';
 import {Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+
 import {Game} from '../../../types';
+
 import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
@@ -38,7 +41,20 @@ export class GameService {
    * @param id
    */
   getGame(id: string): Observable<Game> {
-    return this.afs.collection('games').doc<Game>(id).valueChanges();
+    return this.afs.collection('games').doc<Game>(id).snapshotChanges().pipe(
+        map(action => {
+          const game = action.payload.data();
+
+          if (game.board) {
+            game.board.players.forEach(player => {
+              Object.keys(player.coordinates).forEach(key => {
+                player.coordinates[key] = player.userId;
+              });
+            });
+          }
+
+          return game;
+        }));
   }
 
   /**

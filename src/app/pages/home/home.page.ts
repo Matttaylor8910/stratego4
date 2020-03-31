@@ -1,6 +1,7 @@
 import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {GameService} from 'src/app/services/game.service';
+import {MapService} from 'src/app/services/map.service';
 
 @Component({
   selector: 'app-home',
@@ -11,6 +12,7 @@ export class HomePage {
   disabled = false;
 
   constructor(
+      public mapService: MapService,
       private readonly router: Router,
       private readonly gameService: GameService,
   ) {}

@@ -33,7 +33,7 @@ export class GameTileComponent {
   }
 
   get selected(): boolean {
-    const {row, col} = this.placementService.selectedCell || {};
+    const {row = -1, col = -1} = this.placementService.selectedCell || {};
     return row === this.row && col === this.col;
   }
 
@@ -49,24 +49,21 @@ export class GameTileComponent {
   get tileColor(): string {
     const {row, col, board} = this;
     if (board) {
-      if (board.offLimits.some(
-              offLimitCell =>
-                  (offLimitCell.row === row && offLimitCell.col === col))) {
+      const key = `${row},${col}`;
+
+      // check for off limits
+      if (board.offLimits.hasOwnProperty(key)) {
         return '#808080';  // Greyed out
       }
 
-      let playerColor = '';
-      board.players.forEach(player => {
-        if (player.coordinates.some(
-                playerCell =>
-                    (playerCell.row === row && playerCell.col === col))) {
-          playerColor = player.color;
-          return;
+      // then player color
+      for (const player of board.players) {
+        if (player.coordinates.hasOwnProperty(key)) {
+          return player.color;
         }
-      });
-      if (playerColor) {
-        return playerColor;
       }
+
+      // default to blank
       return '#FFFFFF';
     }
   }

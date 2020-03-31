@@ -82,8 +82,8 @@ export interface Map {
 
   // the visual state of where which tiles the player occupies
   players: {
-    color: string,              // hex value
-    coordinates: Coordinate[],  // starting positions
+    color: string,               // hex value
+    coordinates: CoordinateMap,  // starting positions
 
     // if userId is not set, then show a play button
     userId?: string,
@@ -93,8 +93,12 @@ export interface Map {
   pieces: PiecesMap;
 
   // all tiles that cannot be visited when playing
-  offLimits: Coordinate[];
+  offLimits: CoordinateMap;
 }
+
+// '3,4': '' and '3,4': 'XP43lEobQNW4yaPMzpWHu7xsb732' are both valid
+// when the value is a userId (set by the client) then the user owns that tile
+export interface CoordinateMap extends PlayerPosition {}
 
 // pieces is a map of several shortNames that correspond to the number of that
 // piece allowed
@@ -127,4 +131,7 @@ export interface User {
 export interface Coordinate {
   row: number;
   col: number;
+
+  // used by client to determine ownership of a tile
+  userId?;
 }

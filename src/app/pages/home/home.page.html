@@ -8,6 +8,10 @@
       <ion-button (click)="createGame(gameName.value)" [disabled]="!gameName.value">
         Play
       </ion-button>
+
+      <ion-button (click)="mapService.createDefaultMap()" disabled>
+        Default
+      </ion-button>
     </div>
   </section>
 </ion-content>

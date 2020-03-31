@@ -22,6 +22,18 @@ export class BoardComponent {
       private readonly gameService: GameService,
   ) {}
 
+  get rotateClass(): string {
+    if (this.game && this.game.board) {
+      const {players} = this.game.board;
+      for (let i = 0; i < players.length; i++) {
+        if (players[i].userId === this.authService.currentUserId) {
+          return `rotate-player-${i}`;
+        }
+      }
+    }
+    return '';
+  }
+
   get board(): Map|undefined {
     return this.game ? this.game.board : undefined;
   }

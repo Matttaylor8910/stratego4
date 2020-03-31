@@ -135,5 +135,5 @@ export interface Coordinate {
   col: number;
 
   // used by client to determine ownership of a tile
-  userId?;
+  userId?: string;
 }

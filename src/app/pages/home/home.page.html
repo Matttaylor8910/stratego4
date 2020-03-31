@@ -3,7 +3,7 @@
     <div class="start-game-container">
       <h1>Stratego 4</h1>
 
-      <ion-input #gameName placeholder="Custom Game Code"></ion-input>
+      <ion-input #gameName placeholder="Custom Game Code" (keyup.enter)="createGame(gameName.value)"></ion-input>
 
       <ion-button (click)="createGame(gameName.value)" [disabled]="!gameName.value">
         Play

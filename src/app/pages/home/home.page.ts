@@ -8,6 +8,8 @@ import {GameService} from 'src/app/services/game.service';
   styleUrls: ['./home.page.scss'],
 })
 export class HomePage {
+  disabled = false;
+
   constructor(
       private readonly router: Router,
       private readonly gameService: GameService,
@@ -18,7 +20,10 @@ export class HomePage {
    * @param name
    */
   async createGame(name: string) {
-    const gameId = await this.gameService.createOrGetGame(name);
-    this.router.navigate(['game', gameId]);
+    if (name) {
+      this.disabled = true;
+      const gameId = await this.gameService.createOrGetGame(name);
+      this.router.navigate(['game', gameId]);
+    }
   }
 }

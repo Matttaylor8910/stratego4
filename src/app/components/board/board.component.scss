@@ -1,5 +1,6 @@
-.board-container {
+#board {
   position: relative;
+  transition: all 1s ease-out;
 
   .map-container {
     display: flex;
@@ -8,31 +9,61 @@
     height: 100%;
   }
 
-  .team-1-join-button {
+  .join-button {
     position: absolute;
-    top: 5%;
-    left: 50%;
-    transform: translate(-50%);
+
+    &.team-1 {
+      top: 5%;
+      left: 50%;
+      transform: translate(-50%);
+    }
+    &.team-2 {
+      top: 50%;
+      transform: translateY(-50%);
+      left: 5%;
+    }
+    &.team-3 {
+      top: 50%;
+      transform: translateY(-50%);
+      right: 5%;
+    }
+    &.team-4 {
+      bottom: 5%;
+      left: 50%;
+      transform: translate(-50%);
+    }
   }
 
-  .team-2-join-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 5%;
+  // rotate classes
+  &.rotate-player-0 {
+    transform: rotate(180deg);
+    str-game-tile { transform: rotate(-180deg);}
+    .team-1, .team-4 {
+      transform: translate(-50%) rotate(-180deg);
+    }
+    .team-2, .team-3 {
+      transform: translateY(-50%) rotate(-180deg);
+    }
   }
-
-  .team-3-join-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    right: 5%;
+  &.rotate-player-1 {
+    transform: rotate(-90deg);
+    str-game-tile { transform: rotate(90deg);}
+    .team-1, .team-4 {
+      transform: translate(-50%) rotate(90deg);
+    }
+    .team-2, .team-3 {
+      transform: translateY(-50%) rotate(90deg);
+    }
   }
-
-  .team-4-join-button {
-    position: absolute;
-    bottom: 5%;
-    left: 50%;
-    transform: translate(-50%);
+  &.rotate-player-2 {
+    transform: rotate(90deg);
+    str-game-tile { transform: rotate(-90deg);}
+    .team-1, .team-4 {
+      transform: translate(-50%) rotate(-90deg);
+    }
+    .team-2, .team-3 {
+      transform: translateY(-50%) rotate(-90deg);
+    }
   }
+  &.rotate-player-3 {} // no rotate necessary
 }

@@ -24,8 +24,6 @@ export class GameplayService {
         this.buildAvailableMoves(rank, coordinate, game);
         break;
     }
-
-    console.log(this.selectedCell, this.availableMoves);
   }
 
   private buildAvailableMoves(rank: Piece, coordinate: Coordinate, game: Game) {
@@ -67,29 +65,37 @@ export class GameplayService {
   buildAvailableMovesLeft(
       rank: Piece, row: number, col: number, gameMap: CoordinateMap,
       game: Game) {
-    const added = this.addAvailableMove(row, col - 1, gameMap, game);
-    console.log('added move to the left: ', added);
+    const keepGoing = this.addAvailableMove(row, col - 1, gameMap, game);
+    if (keepGoing && rank === Piece.TWO) {
+      this.buildAvailableMovesLeft(rank, row, col - 1, gameMap, game);
+    }
   }
 
   buildAvailableMovesRight(
       rank: Piece, row: number, col: number, gameMap: CoordinateMap,
       game: Game) {
-    const added = this.addAvailableMove(row, col + 1, gameMap, game);
-    console.log('added move to the right: ', added);
+    const keepGoing = this.addAvailableMove(row, col + 1, gameMap, game);
+    if (keepGoing && rank === Piece.TWO) {
+      this.buildAvailableMovesRight(rank, row, col + 1, gameMap, game);
+    }
   }
 
   buildAvailableMovesUp(
       rank: Piece, row: number, col: number, gameMap: CoordinateMap,
       game: Game) {
-    const added = this.addAvailableMove(row - 1, col, gameMap, game);
-    console.log('added move to the up: ', added);
+    const keepGoing = this.addAvailableMove(row - 1, col, gameMap, game);
+    if (keepGoing && rank === Piece.TWO) {
+      this.buildAvailableMovesUp(rank, row - 1, col, gameMap, game);
+    }
   }
 
   buildAvailableMovesDown(
       rank: Piece, row: number, col: number, gameMap: CoordinateMap,
       game: Game) {
-    const added = this.addAvailableMove(row + 1, col, gameMap, game);
-    console.log('added move to the down: ', added);
+    const keepGoing = this.addAvailableMove(row + 1, col, gameMap, game);
+    if (keepGoing && rank === Piece.TWO) {
+      this.buildAvailableMovesDown(rank, row + 1, col, gameMap, game);
+    }
   }
 
   private addAvailableMove(
@@ -107,7 +113,12 @@ export class GameplayService {
       case 'me':
       case 'offLimits':
         return false;
+      case 'enemy':
+        // it's an available move, but you can't go further
+        this.availableMoves[key] = 'true';
+        return false;
       default:
+        // it's an empty space, so it's good
         this.availableMoves[key] = 'true';
         return true;
     }

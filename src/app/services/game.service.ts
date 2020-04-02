@@ -58,6 +58,10 @@ export class GameService {
         }));
   }
 
+  getGames(): Observable<Game[]> {
+    return this.afs.collection<Game>('games').valueChanges();
+  }
+
   /**
    * Join a game
    */

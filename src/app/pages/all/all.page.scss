@@ -1,0 +1,15 @@
+.games-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+
+  str-board {
+    margin: 10px;
+  }
+
+  &.shrink ::ng-deep section.game-tile-container {
+    width: 25px !important;
+    height: 25px !important;
+  }
+}

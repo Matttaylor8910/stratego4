@@ -1,0 +1,14 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>All Games</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="games$ | async as games">
+  <section class="games-container" [class.shrink]="games.length > 2">
+    <str-board
+      *ngFor="let game of games"
+      [game]="game">
+    </str-board>
+  </section>
+</ion-content>

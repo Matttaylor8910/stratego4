@@ -11,15 +11,15 @@ try {
 const db = admin.firestore();
 
 const captureValues = {
-    [Piece.TWO]: 2,
-    [Piece.THREE]: 3,
-    [Piece.FOUR]: 4,
-    [Piece.FIVE]: 5,
-    [Piece.SIX]: 6,
-    [Piece.GENERAL]: 7,
-    [Piece.SPY]: 0,
-    [Piece.BOMB]: 5,
-    [Piece.FLAG]: 15,
+  [Piece.TWO]: 2,
+  [Piece.THREE]: 3,
+  [Piece.FOUR]: 4,
+  [Piece.FIVE]: 5,
+  [Piece.SIX]: 6,
+  [Piece.GENERAL]: 7,
+  [Piece.SPY]: 0,
+  [Piece.BOMB]: 5,
+  [Piece.FLAG]: 15,
 };
 
 export const onCreateMove =
@@ -45,7 +45,8 @@ export const onCreateMove =
           });
 
           // determine the player and fetch their position
-          const myPlayerIndex = game.board!.players.findIndex(p => p.userId === move.userId);
+          const myPlayerIndex =
+              game.board!.players.findIndex(p => p.userId === move.userId);
           const myPlayer = game.board!.players[myPlayerIndex];
 
           const posRef = gameRef!.collection('positions').doc(move.userId);
@@ -63,7 +64,8 @@ export const onCreateMove =
             const enemyRef = gameRef!.collection('positions').doc(enemyUserId);
             const enemySnapshot = await enemyRef.get();
             const enemyPosition = enemySnapshot.data() as CoordinateMap;
-            const enemyPlayerIndex = game.board!.players.findIndex(p => p.userId === enemyUserId);
+            const enemyPlayerIndex =
+                game.board!.players.findIndex(p => p.userId === enemyUserId);
             const enemyPlayer = game.board!.players[enemyPlayerIndex];
 
             const myRank = playerPosition[fromKey] as Piece;
@@ -79,7 +81,7 @@ export const onCreateMove =
               batch.set(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete enemyPlayer!.coordinates[toKey];
+              delete enemyPlayer.coordinates[toKey];
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
@@ -87,12 +89,13 @@ export const onCreateMove =
               batch.set(posRef, playerPosition);
 
               // update my player coordinates
-              delete myPlayer!.coordinates[fromKey];
-              myPlayer!.coordinates[toKey] = '';
+              delete myPlayer.coordinates[fromKey];
+              myPlayer.coordinates[toKey] = '';
 
-              //update scores
+              // update scores
               // myPlayer gets enemyRank points
-              game.state!.players[myPlayerIndex].score += captureValues[enemyRank];
+              game.state!.players[myPlayerIndex].score +=
+                  captureValues[enemyRank];
             }
 
             // if they won, I just die
@@ -104,11 +107,12 @@ export const onCreateMove =
               batch.set(posRef, playerPosition);
 
               // delete my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              delete myPlayer.coordinates[fromKey];
 
-              //update scores
+              // update scores
               // enemyPlayer gets myRank points
-              game.state!.players[enemyPlayerIndex].score += captureValues[myRank];
+              game.state!.players[enemyPlayerIndex].score +=
+                  captureValues[myRank];
             }
 
             // if we tie, both die
@@ -120,18 +124,20 @@ export const onCreateMove =
               batch.set(enemyRef, enemyPosition);
 
               // delete their player coordinates
-              delete enemyPlayer!.coordinates[toKey];
+              delete enemyPlayer.coordinates[toKey];
 
               // delete my position
               delete playerPosition[fromKey];
               batch.set(posRef, playerPosition);
 
               // delete my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              delete myPlayer.coordinates[fromKey];
 
               // Both players get points
-              game.state!.players[myPlayerIndex].score += captureValues[enemyRank];
-              game.state!.players[enemyPlayerIndex].score += captureValues[myRank];
+              game.state!.players[myPlayerIndex].score +=
+                  captureValues[enemyRank];
+              game.state!.players[enemyPlayerIndex].score +=
+                  captureValues[myRank];
             }
 
             // we captured the flag!!!
@@ -144,7 +150,7 @@ export const onCreateMove =
               batch.set(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete enemyPlayer!.coordinates[toKey];
+              delete enemyPlayer.coordinates[toKey];
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
@@ -152,11 +158,12 @@ export const onCreateMove =
               batch.set(posRef, playerPosition);
 
               // update my player coordinates
-              delete myPlayer!.coordinates[fromKey];
-              myPlayer!.coordinates[toKey] = '';
+              delete myPlayer.coordinates[fromKey];
+              myPlayer.coordinates[toKey] = '';
 
-              //Flag points
-              game.state!.players[myPlayerIndex].score += captureValues[enemyRank];
+              // Flag points
+              game.state!.players[myPlayerIndex].score +=
+                  captureValues[enemyRank];
             }
           }
 
@@ -170,8 +177,8 @@ export const onCreateMove =
             batch.set(posRef, playerPosition);
 
             // update my player coordinates
-            delete myPlayer!.coordinates[fromKey];
-            myPlayer!.coordinates[toKey] = '';
+            delete myPlayer.coordinates[fromKey];
+            myPlayer.coordinates[toKey] = '';
           }
 
           // update the game

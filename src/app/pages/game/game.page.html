@@ -41,12 +41,15 @@
             [game]="game"
             [position]="playerPosition">
           </str-piece-tray>
-
-          <ng-container *ngIf="game.phase === 'playing'">
-            <div *ngIf="myTurn">Your Turn</div>
-            <div *ngIf="!myTurn">Waiting for opponent to play...</div>
-          </ng-container>
+          <div *ngIf="game.phase === 'playing'">
+            {{ myTurn ? 'Your Turn' : 'Waiting for opponent to play...' }}
+          </div>
         </ng-container>
+
+        <str-outcome-feed
+          *ngIf="game && game.phase === 'playing'"
+          [game]="game">
+        </str-outcome-feed>
 
       </ng-container>
       <ng-template #creating>

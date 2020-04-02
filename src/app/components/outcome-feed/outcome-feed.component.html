@@ -1,0 +1,17 @@
+<ng-container *ngIf="outcomes$ | async as outcomes">
+  <section class="outcome-feed-container">
+    <div class="outcome"  *ngFor="let outcome of outcomes">
+      <span class="tile" [style.background]="outcome.piece1.color">
+        {{ outcome.piece1.rank }}
+      </span>
+      {{ outcome.action }}
+      <span class="tile" [style.background]="outcome.piece1.color">
+        {{ outcome.piece1.rank }}
+      </span>
+      {{ outcome.suffix }}
+    </div>
+    <div class="nothing" *ngIf="outcomes.length === 0">
+      Nothing has happened yet
+    </div>
+  </section>
+</ng-container>

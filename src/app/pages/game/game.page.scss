@@ -10,3 +10,28 @@
     align-items: center;
   }
 }
+
+.centered-container {
+  position: relative;
+
+  str-outcome-feed {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1300px) {
+  // make room for the feed on the right on bigger displays
+  .centered-container {
+    padding-right: 340px;
+  }
+}
+@media (max-width: 999px) {
+  .centered-container str-outcome-feed {
+    top: initial;
+    right: initial;
+    position: relative;
+    margin-top: 20px;
+  }
+}

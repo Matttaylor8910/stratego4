@@ -1,0 +1,20 @@
+.outcome-feed-container {
+  width: 300px;
+  border: 1px solid #000;
+
+  .outcome {
+    padding: 20px;
+  }
+
+  .nothing {
+    padding: 20px;
+  }
+
+  .piece {
+    height: 48px;
+    width: 48px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

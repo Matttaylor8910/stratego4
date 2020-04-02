@@ -148,3 +148,19 @@ export interface Coordinate {
   // used by client to determine ownership of a tile
   userId?: string;
 }
+
+// /games/{gameId}/outcomes/{outcomeId}
+export interface Outcome {
+  piece1: OutcomePiece;
+  piece2: OutcomePiece;
+
+  action: string;  // attacked, captured, tripped on a (bomb)
+  suffix: string;  // and lost, and died, and was blown to bits
+
+  timestamp: number;
+}
+
+export interface OutcomePiece {
+  rank: Piece;
+  color: string;
+}

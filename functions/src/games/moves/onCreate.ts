@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-import {CoordinateMap, Game, Move, Piece} from '../../../../types';
+import {CoordinateMap, Game, Move, Outcome, Piece} from '../../../../types';
 
 try {
   admin.initializeApp();
@@ -22,16 +22,49 @@ const captureValues = {
   [Piece.FLAG]: 15,
 };
 
+// @ts-ignore
+function createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer,  enemyRank, outcome}) {
+
+  let suffix = '';
+  if (outcome === 'win') {
+    suffix = 'and won';
+  } else if (outcome === 'lose') {
+    suffix = 'and died';
+  } else if (outcome === 'tie') {
+    suffix = 'and they both died';
+  } else if (outcome === 'flag') {
+    suffix = '';
+  }
+
+  const date = Date.now();
+  const newOutcome = {
+    piece1: {
+      rank: myRank,
+      color: myPlayer!.color
+    },
+    piece2: {
+      rank: enemyRank,
+      color: enemyPlayer!.color
+    },
+    action: 'attacked',
+    suffix: suffix,
+    timestamp: date
+  } as Outcome;
+  batch.set(outcomesRef!.doc(`${date}`), newOutcome);
+}
+
 export const onCreateMove =
     functions.firestore.document('games/{gameId}/moves/{moveId}')
         .onCreate(async (snapshot, _context) => {
-          const moveRef = snapshot.ref
+          const moveRef = snapshot.ref;
           const moveSnapshot = await moveRef.get();
           const move = moveSnapshot.data() as Move;
 
           const gameRef = moveRef.parent.parent;
           const gameSnapShot = await gameRef!.get();
           const game = gameSnapShot.data() as Game;
+
+          const outcomesRef = gameRef!.collection("outcomes");
 
           // '3,4' => userId of enemy
           const enemies: CoordinateMap = {};
@@ -97,6 +130,9 @@ export const onCreateMove =
               // update scores
               // myPlayer gets enemyRank points
               myPlayerState!.score += captureValues[enemyRank];
+
+              //outcome
+              createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer, enemyRank, outcome});
             }
 
             // if they won, I just die
@@ -113,6 +149,7 @@ export const onCreateMove =
               // update scores
               // enemyPlayer gets myRank points
               enemyPlayerState!.score += captureValues[myRank];
+              createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer, enemyRank, outcome});
             }
 
             // if we tie, both die
@@ -136,6 +173,7 @@ export const onCreateMove =
               // Both players get points
               myPlayerState!.score += captureValues[enemyRank];
               enemyPlayerState!.score += captureValues[myRank];
+              createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer, enemyRank, outcome});
             }
 
             // we captured the flag!!!
@@ -161,6 +199,7 @@ export const onCreateMove =
 
               // Flag points
               myPlayerState!.score += captureValues[enemyRank];
+              createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer, enemyRank, outcome});
             }
           }
 

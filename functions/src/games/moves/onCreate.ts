@@ -66,7 +66,7 @@ export const onCreateMove =
               batch.update(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete player!.coordinates[toKey];
+              delete enemyPlayer!.coordinates[toKey];
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];

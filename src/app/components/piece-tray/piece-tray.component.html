@@ -13,6 +13,12 @@
 
     <div class="buttons-container">
       <ion-button
+        color="secondary"
+        (click)="shufflePieces()"
+      >
+        Shuffle
+      </ion-button>
+      <ion-button
         color="primary"
         [disabled]="!placementService.selectedCell"
         (click)="placementService.selectPiece(placementService.pieces.length)"

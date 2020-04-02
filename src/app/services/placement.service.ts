@@ -1,11 +1,13 @@
 import {Injectable} from '@angular/core';
 import {AngularFirestore} from '@angular/fire/firestore';
-import {Coordinate, PlayerPosition} from 'types';
+import {shuffle} from 'lodash';
+import {Coordinate, Map, PlayerPosition} from 'types';
 
 import {AuthService} from './auth.service';
 
 @Injectable({providedIn: 'root'})
 export class PlacementService {
+  private originalPieces: string[] = [];
   pieces: string[] = [];
 
   selectedPieceIndex: number;
@@ -19,7 +21,8 @@ export class PlacementService {
   ) {}
 
   setPieces(pieces: string[]) {
-    this.pieces = pieces;
+    this.originalPieces = [...pieces];
+    this.pieces = [...pieces];
   }
 
   selectPiece(index: number) {
@@ -66,6 +69,21 @@ export class PlacementService {
       this.selectedCell = undefined;
     }
   }
+
+  shufflePieces(board: Map) {
+    const player =
+        board.players.find(p => p.userId === this.authService.currentUserId);
+    const shuffled = shuffle(this.originalPieces);
+
+    Object.keys(player.coordinates).forEach(key => {
+      this.position[key] = shuffled.shift();
+    });
+
+    this.selectedPieceIndex = undefined;
+    this.selectedCell = undefined;
+    this.pieces = [];
+  }
+
   /**
    * Add the current position to the database for a given game
    */

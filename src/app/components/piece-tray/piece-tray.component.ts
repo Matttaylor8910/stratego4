@@ -42,6 +42,10 @@ export class PieceTrayComponent implements OnInit {
     this.placementService.setPieces(pieces);
   }
 
+  shufflePieces() {
+    this.placementService.shufflePieces(this.game.board);
+  }
+
   savePosition() {
     this.saved = true;
     this.placementService.createPlayerPosition(this.game.id);

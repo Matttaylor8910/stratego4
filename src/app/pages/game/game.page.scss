@@ -4,6 +4,9 @@
 
   .score {
     width: 25%;
-    display: inline-block;
+    display: inline-flex;
+    height: 55px;
+    justify-content: center;
+    align-items: center;
   }
 }

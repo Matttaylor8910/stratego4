@@ -45,9 +45,8 @@ export const onCreateMove =
           });
 
           // determine the player and fetch their position
-          const myPlayerIndex =
-              game.board!.players.findIndex(p => p.userId === move.userId);
-          const myPlayer = game.board!.players[myPlayerIndex];
+          const myPlayer = game.board!.players.find(p => p.userId === move.userId);
+          const myPlayerState = game.state!.players.find(p => p.userId === move.userId);
 
           const posRef = gameRef!.collection('positions').doc(move.userId);
           const posSnapshot = await posRef.get();
@@ -64,9 +63,8 @@ export const onCreateMove =
             const enemyRef = gameRef!.collection('positions').doc(enemyUserId);
             const enemySnapshot = await enemyRef.get();
             const enemyPosition = enemySnapshot.data() as CoordinateMap;
-            const enemyPlayerIndex =
-                game.board!.players.findIndex(p => p.userId === enemyUserId);
-            const enemyPlayer = game.board!.players[enemyPlayerIndex];
+            const enemyPlayer = game.board!.players.find(p => p.userId === enemyUserId);
+            const enemyPlayerState = game.state!.players.find(p => p.userId === enemyUserId);
 
             const myRank = playerPosition[fromKey] as Piece;
             const enemyRank = enemyPosition[toKey] as Piece;
@@ -94,8 +92,7 @@ export const onCreateMove =
 
               // update scores
               // myPlayer gets enemyRank points
-              game.state!.players[myPlayerIndex].score +=
-                  captureValues[enemyRank];
+              myPlayerState.score += captureValues[enemyRank];
             }
 
             // if they won, I just die
@@ -111,8 +108,7 @@ export const onCreateMove =
 
               // update scores
               // enemyPlayer gets myRank points
-              game.state!.players[enemyPlayerIndex].score +=
-                  captureValues[myRank];
+              enemyPlayerState.score += captureValues[myRank];
             }
 
             // if we tie, both die
@@ -134,10 +130,8 @@ export const onCreateMove =
               delete myPlayer.coordinates[fromKey];
 
               // Both players get points
-              game.state!.players[myPlayerIndex].score +=
-                  captureValues[enemyRank];
-              game.state!.players[enemyPlayerIndex].score +=
-                  captureValues[myRank];
+              myPlayerState.score += captureValues[enemyRank];
+              enemyPlayerState.score += captureValues[myRank];
             }
 
             // we captured the flag!!!
@@ -162,8 +156,7 @@ export const onCreateMove =
               myPlayer.coordinates[toKey] = '';
 
               // Flag points
-              game.state!.players[myPlayerIndex].score +=
-                  captureValues[enemyRank];
+              myPlayerState.score += captureValues[enemyRank];
             }
           }
 

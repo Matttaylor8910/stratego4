@@ -40,6 +40,10 @@ export class GamePage implements OnDestroy {
     this.getUserPosition();
   }
 
+  backgroundColor(player, game) {
+    return '#eee';
+  }
+
   /**
    * Subscribe to the user's position to layover the board
    */

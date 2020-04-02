@@ -1,0 +1,9 @@
+.scores-toolbar {
+  display: flex;
+  padding: 0;
+
+  .score {
+    width: 25%;
+    display: inline-block;
+  }
+}

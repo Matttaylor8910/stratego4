@@ -12,6 +12,13 @@
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
+  <ion-toolbar *ngIf="game$ | async as game">
+    <ion-title mode="ios" class="scores-toolbar">
+      <div class="score" *ngFor="let player of game?.state?.players" [style.background]="backgroundColor(player, game)">
+        {{ player.score }}
+      </div>
+    </ion-title>
+  </ion-toolbar>
 </ion-header>
 
 <ion-content>

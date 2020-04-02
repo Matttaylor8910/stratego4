@@ -109,7 +109,7 @@ export interface Map {
 // '3,4': '' and '3,4': 'XP43lEobQNW4yaPMzpWHu7xsb732' are both valid
 // when the value is a userId (set by the client) then the user owns that tile
 export interface CoordinateMap {
-  [coordinate: string]: string|firebase.firestore.FieldValue;
+  [coordinate: string]: string;
 }
 
 // pieces is a map of several shortNames that correspond to the number of that

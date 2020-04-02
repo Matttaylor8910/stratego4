@@ -1,4 +1,3 @@
-import {firestore} from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
@@ -18,8 +17,9 @@ export const onCreateMove =
           const moveSnapshot = await moveRef.get();
           const move = moveSnapshot.data() as Move;
 
-          const gameRef = moveRef.parent.parent;
-          const gameSnapShot = await gameRef!.get();
+          const gameRef =
+              moveRef.parent.parent as admin.firestore.DocumentReference;
+          const gameSnapShot = await gameRef.get();
           const game = gameSnapShot.data() as Game;
 
           // '3,4' => userId of enemy
@@ -34,9 +34,9 @@ export const onCreateMove =
           });
 
           // determine the player and fetch their position
-          const myPlayer =
-              game.board!.players.find(p => p.userId === move.userId);
-          const posRef = gameRef!.collection('positions').doc(move.userId);
+          const myPlayerIndex =
+              game.board!.players.findIndex(p => p.userId === move.userId);
+          const posRef = gameRef.collection('positions').doc(move.userId);
           const posSnapshot = await posRef.get();
           const playerPosition = posSnapshot.data() as CoordinateMap;
 
@@ -48,12 +48,11 @@ export const onCreateMove =
           // if enemy, determine winner, delete the other
           if (enemies.hasOwnProperty(toKey)) {
             const enemyUserId = enemies[toKey];
-            const enemyRef =
-                gameRef!.collection('positions').doc(enemyUserId as string);
+            const enemyRef = gameRef.collection('positions').doc(enemyUserId);
             const enemySnapshot = await enemyRef.get();
             const enemyPosition = enemySnapshot.data() as CoordinateMap;
-            const enemyPlayer =
-                game.board!.players.find(p => p.userId === enemyUserId);
+            const enemyPlayerIndex =
+                game.board!.players.findIndex(p => p.userId === enemyUserId);
 
             const myRank = playerPosition[fromKey] as Piece;
             const enemyRank = enemyPosition[toKey] as Piece;
@@ -64,20 +63,26 @@ export const onCreateMove =
               console.log('win');
 
               // update their position
-              enemyPosition[toKey] = firestore.FieldValue.delete();
-              batch.update(enemyRef, enemyPosition);
+              batch.update(
+                  enemyRef, toKey, admin.firestore.FieldValue.delete());
 
               // update their player coordinates
-              enemyPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
+              batch.update(
+                  gameRef,
+                  `board.players[${enemyPlayerIndex}].coordinates.${toKey}`,
+                  admin.firestore.FieldValue.delete());
 
               // update my position
-              playerPosition[toKey] = playerPosition[fromKey];
-              playerPosition[fromKey] = firestore.FieldValue.delete();
-              batch.update(posRef, playerPosition);
+              batch.update(
+                  posRef, toKey, playerPosition[fromKey], fromKey,
+                  admin.firestore.FieldValue.delete());
 
               // update my player coordinates
-              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
-              myPlayer!.coordinates[toKey] = '';
+              batch.update(
+                  gameRef,
+                  `board.players[${myPlayerIndex}].coordinates.${fromKey}`,
+                  admin.firestore.FieldValue.delete(),
+                  `board.players[${myPlayerIndex}].coordinates.${toKey}`, '');
             }
 
             // if they won, I just die
@@ -85,11 +90,14 @@ export const onCreateMove =
               console.log('lose');
 
               // delete my position
-              playerPosition[fromKey] = firestore.FieldValue.delete();
-              batch.update(posRef, playerPosition);
+              batch.update(
+                  posRef, fromKey, admin.firestore.FieldValue.delete());
 
               // delete my player coordinates
-              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
+              batch.update(
+                  gameRef,
+                  `board.players[${myPlayerIndex}].coordinates.${fromKey}`,
+                  admin.firestore.FieldValue.delete());
             }
 
             // if we tie, both die
@@ -97,18 +105,24 @@ export const onCreateMove =
               console.log('tie');
 
               // delete their position
-              enemyPosition[toKey] = firestore.FieldValue.delete();
-              batch.update(enemyRef, enemyPosition);
+              batch.update(
+                  enemyRef, toKey, admin.firestore.FieldValue.delete());
 
               // delete their player coordinates
-              enemyPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
+              batch.update(
+                  gameRef,
+                  `board.players[${enemyPlayerIndex}].coordinates.${toKey}`,
+                  admin.firestore.FieldValue.delete());
 
               // delete my position
-              playerPosition[fromKey] = firestore.FieldValue.delete();
-              batch.update(posRef, playerPosition);
+              batch.update(
+                  posRef, fromKey, admin.firestore.FieldValue.delete());
 
               // delete my player coordinates
-              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
+              batch.update(
+                  gameRef,
+                  `board.players[${myPlayerIndex}].coordinates.${fromKey}`,
+                  admin.firestore.FieldValue.delete());
             }
 
             // we captured the flag!!!
@@ -118,20 +132,26 @@ export const onCreateMove =
               // TODO: update capture points +15, eliminate that player
 
               // update their position
-              enemyPosition[toKey] = firestore.FieldValue.delete();
-              batch.update(enemyRef, enemyPosition);
+              batch.update(
+                  enemyRef, toKey, admin.firestore.FieldValue.delete());
 
               // update their player coordinates
-              myPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
+              batch.update(
+                  gameRef,
+                  `board.players[${enemyPlayerIndex}].coordinates.${toKey}`,
+                  admin.firestore.FieldValue.delete());
 
               // update my position
-              playerPosition[toKey] = playerPosition[fromKey];
-              playerPosition[fromKey] = firestore.FieldValue.delete();
-              batch.update(posRef, playerPosition);
+              batch.update(
+                  posRef, toKey, playerPosition[fromKey], fromKey,
+                  admin.firestore.FieldValue.delete());
 
               // update my player coordinates
-              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
-              myPlayer!.coordinates[toKey] = '';
+              batch.update(
+                  gameRef,
+                  `board.players[${myPlayerIndex}].coordinates.${fromKey}`,
+                  admin.firestore.FieldValue.delete(),
+                  `board.players[${myPlayerIndex}].coordinates.${toKey}`, '');
             }
           }
 
@@ -140,19 +160,24 @@ export const onCreateMove =
             console.log('empty');
 
             // update my position
-            playerPosition[toKey] = playerPosition[fromKey];
-            playerPosition[fromKey] = firestore.FieldValue.delete();
-            batch.update(posRef, playerPosition);
+            batch.update(posRef, {
+              [toKey]: playerPosition[fromKey],
+              [fromKey]: admin.firestore.FieldValue.delete(),
+            });
 
             // update my player coordinates
-            myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
-            myPlayer!.coordinates[toKey] = '';
+            batch.update(gameRef, {
+              [`board.players[${myPlayerIndex}].coordinates.${fromKey}`]:
+                  admin.firestore.FieldValue.delete(),
+              [`board.players[${myPlayerIndex}].coordinates.${toKey}`]: '',
+            });
           }
 
-          // update the game
-          game.state!.turn++;
+          // increment the game turn counter
+          batch.update(gameRef, {
+            'state.turn': admin.firestore.FieldValue.increment(1),
+          });
           // TODO: scores
-          batch.update(gameRef!, game);
 
           // commit
           return batch.commit();

@@ -12,7 +12,8 @@ export class OutcomeService {
   getOutcomes(gameId: string): Observable<Outcome[]> {
     return this.afs.collection('games')
         .doc(gameId)
-        .collection<Outcome>('outcomes', ref => ref.orderBy('timestamp'))
+        .collection<Outcome>(
+            'outcomes', ref => ref.orderBy('timestamp', 'desc'))
         .valueChanges();
   }
 }

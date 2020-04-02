@@ -3,11 +3,11 @@ export enum Piece {
   SPY = '🕵️‍♂️',
   FLAG = '🏁',
   BOMB = '💣',
-  TWO = '2️⃣',
-  THREE = '3️⃣',
-  FOUR = '4️⃣',
-  FIVE = '5️⃣',
-  SIX = '6️⃣'
+  TWO = '2',
+  THREE = '3',
+  FOUR = '4',
+  FIVE = '5',
+  SIX = '6'
 }
 
 // collection at /games/{gameId}

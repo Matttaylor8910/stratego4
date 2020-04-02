@@ -40,17 +40,17 @@ function createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer,  enem
   const newOutcome = {
     piece1: {
       rank: myRank,
-      color: myPlayer!.color
+      color: myPlayer.color
     },
     piece2: {
       rank: enemyRank,
-      color: enemyPlayer!.color
+      color: enemyPlayer.color
     },
     action: 'attacked',
     suffix: suffix,
     timestamp: date
   } as Outcome;
-  batch.set(outcomesRef!.doc(`${date}`), newOutcome);
+  batch.set(outcomesRef.doc(`${date}`), newOutcome);
 }
 
 export const onCreateMove =

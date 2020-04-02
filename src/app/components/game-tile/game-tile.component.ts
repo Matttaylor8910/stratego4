@@ -14,6 +14,7 @@ export class GameTileComponent {
   @Input() position: PlayerPosition;
   @Input() row: number;
   @Input() col: number;
+  @Input() myTurn: boolean;
 
   constructor(
       public readonly placementService: PlacementService,
@@ -38,6 +39,10 @@ export class GameTileComponent {
   }
 
   get selectable(): boolean {
+    // can't select anything when it's not your turn
+    if (this.gamePhase === 'playing' && !this.myTurn) {
+      return false;
+    }
     // you can select available moves
     if (this.availableMove) {
       return true;

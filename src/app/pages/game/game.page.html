@@ -15,14 +15,24 @@
     <ng-container *ngIf="game$ | async as game; else loading">
       <ng-container *ngIf="game.board; else creating">
         <str-board
+          [myTurn]="myTurn"
           [game]="game"
           [position]="position">
         </str-board>
-        <str-piece-tray
-          *ngIf="game.phase === 'placement'"
-          [game]="game"
-          [position]="playerPosition">
-        </str-piece-tray>
+
+        <!-- controls for players in the game -->
+        <ng-container *ngIf="playing">
+          <str-piece-tray
+            *ngIf="game.phase === 'placement'"
+            [game]="game"
+            [position]="playerPosition">
+          </str-piece-tray>
+
+          <ng-container *ngIf="game.phase === 'playing'">
+            <div *ngIf="myTurn">Your Turn</div>
+            <div *ngIf="!myTurn">Waiting for opponent to play...</div>
+          </ng-container>
+        </ng-container>
 
       </ng-container>
       <ng-template #creating>

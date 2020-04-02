@@ -14,11 +14,11 @@ export class GameplayService {
   ) {}
 
   selectCell(rank: Piece, coordinate: Coordinate, game: Game) {
-    // TODO: ensure it's my turn game.currentTurn === this.auth.currentUserId
     switch (rank) {
       case Piece.BOMB:
       case Piece.FLAG:
-        this.clear();
+        this.selectedCell = coordinate;
+        this.availableMoves = {};
         break;  // can't move flags or bombs
       default:
         this.buildAvailableMoves(rank, coordinate, game);
@@ -26,11 +26,6 @@ export class GameplayService {
     }
 
     console.log(this.selectedCell, this.availableMoves);
-  }
-
-  private clear() {
-    this.selectedCell = undefined;
-    this.availableMoves = {};
   }
 
   private buildAvailableMoves(rank: Piece, coordinate: Coordinate, game: Game) {
@@ -61,7 +56,11 @@ export class GameplayService {
 
     // otherwise, this is a move we can make, add to firestore
     else {
-      this.prepareMove(rank, coordinate, game);
+      this.makeMove(game.id, {
+        to: coordinate,
+        from: this.selectedCell,
+        userId: this.authService.currentUserId
+      });
     }
   }
 
@@ -112,11 +111,6 @@ export class GameplayService {
         this.availableMoves[key] = 'true';
         return true;
     }
-  }
-
-  private prepareMove(rank, coordinate, game) {
-    console.log(rank, coordinate, this.selectedCell, game);
-    // this.makeMove(gameId, )
   }
 
   /**

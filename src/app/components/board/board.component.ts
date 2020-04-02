@@ -11,6 +11,7 @@ import {Game, Map, PlayerPosition} from 'types';
   styleUrls: ['./board.component.scss'],
 })
 export class BoardComponent {
+  @Input() myTurn: boolean;
   @Input() game: Game;
   @Input() position: PlayerPosition;
 

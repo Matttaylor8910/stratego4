@@ -36,6 +36,11 @@ function createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer,  enem
     suffix = '';
   }
 
+  let action = 'attacked';
+  if (outcome ==='flag'){
+    action = 'captured'
+  }
+
   const date = Date.now();
   const newOutcome = {
     piece1: {
@@ -46,7 +51,7 @@ function createOutcome({outcomesRef, batch, myPlayer, myRank, enemyPlayer,  enem
       rank: enemyRank,
       color: enemyPlayer.color
     },
-    action: 'attacked',
+    action: action,
     suffix: suffix,
     timestamp: date
   } as Outcome;

@@ -137,7 +137,6 @@ export const onCreateMove =
             // we captured the flag!!!
             else if (outcome === 'flag') {
               console.log('TODO: do more with the flag');
-
               // TODO: eliminate that player
 
               // update their position
@@ -177,7 +176,6 @@ export const onCreateMove =
 
           // update the game
           game.state!.turn++;
-          // TODO: scores
           batch.set(gameRef!, game);
 
           // commit

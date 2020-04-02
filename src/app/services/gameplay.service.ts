@@ -14,6 +14,12 @@ export class GameplayService {
   ) {}
 
   selectCell(rank: Piece, coordinate: Coordinate, game: Game) {
+    if (this.selectedCell && this.selectedCell.row === coordinate.row && this.selectedCell.col === coordinate.col) {
+      this.selectedCell = undefined;
+      this.availableMoves = {};
+      return;
+    }
+
     switch (rank) {
       case Piece.BOMB:
       case Piece.FLAG:
@@ -27,6 +33,8 @@ export class GameplayService {
   }
 
   private buildAvailableMoves(rank: Piece, coordinate: Coordinate, game: Game) {
+    // GameTileComponent is preventing the user from clicking illegal moves before this
+
     // '3,4': 'me'|'enemy'|'offLimits'
     const gameMap: CoordinateMap = {};
     game.board.players.forEach(player => {
@@ -57,7 +65,8 @@ export class GameplayService {
       this.makeMove(game.id, {
         to: coordinate,
         from: this.selectedCell,
-        userId: this.authService.currentUserId
+        userId: this.authService.currentUserId,
+        timestamp: Date.now()
       });
     }
   }
@@ -130,7 +139,6 @@ export class GameplayService {
   private makeMove(gameId: string, move: Move) {
     this.selectedCell = undefined;
     this.availableMoves = {};
-    return this.afs.collection('games').doc(gameId).collection('moves').add(
-        move);
+    return this.afs.collection('games').doc(gameId).collection('moves') .doc(`${move.timestamp}`).set(move);
   }
 }

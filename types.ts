@@ -55,6 +55,7 @@ export interface Move {
   from: Coordinate;
   to: Coordinate;
   userId: string;
+  timestamp: number;
 }
 
 // /games/{gameId}/requests/{docId}

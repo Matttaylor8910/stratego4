@@ -69,7 +69,7 @@ export class MapService {
         },
         {
           // green
-          color: '#DCE9D5',
+          color: '#b9e2a3',
           coordinates: {
             '4,10': '',
             '4,11': '',
@@ -93,7 +93,7 @@ export class MapService {
         },
         {
           // yellow
-          color: '#FDF2D0',
+          color: '#e8d086',
           coordinates: {
             '9,5': '',
             '9,6': '',

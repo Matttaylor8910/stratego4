@@ -35,6 +35,9 @@ export class GamePage implements OnDestroy {
     this.game$ = this.gameService.getGame(this.gameId).pipe(tap(game => {
       this.myTurn = this.isMyTurn(game);
       this.playing = this.inGame(game);
+      if (game.state) {
+        game.state.players.sort((a, b) => b.score - a.score);
+      }
     }));
 
     this.getUserPosition();

@@ -182,7 +182,6 @@ export const onCreateMove =
           }
 
           // update the game
-          game.state!.players.sort((a, b) => b.score - a.score);
           game.state!.turn++;
           batch.set(gameRef!, game);
 

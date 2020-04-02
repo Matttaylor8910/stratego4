@@ -1,24 +1,26 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-back-button></ion-back-button>
-    </ion-buttons>
-    <ion-title *ngIf="game$ | async as game">
-      {{ game.name }}
-    </ion-title>
-    <ion-buttons slot="end" *ngIf="game$ | async as game">
-      <ion-button color="primary" fill="clear">
-        Turn {{ game?.state?.turn + 1}}
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-  <ion-toolbar *ngIf="game$ | async as game">
-    <ion-title mode="ios" class="scores-toolbar">
-      <div class="score" *ngFor="let player of game?.state?.players" [style.background]="backgroundColor(player, game)">
-        {{ player.score }}
-      </div>
-    </ion-title>
-  </ion-toolbar>
+  <ng-container *ngIf="game$ | async as game">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button></ion-back-button>
+      </ion-buttons>
+      <ion-title>
+        {{ game.name }}
+      </ion-title>
+      <ion-buttons slot="end" *ngIf="game.phase === 'playing'">
+        <ion-button color="primary" fill="clear">
+          Turn {{ game?.state?.turn + 1}}
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+    <ion-toolbar >
+      <ion-title mode="ios" class="scores-toolbar">
+        <div class="score" *ngFor="let player of game?.state?.players" [style.background]="backgroundColor(player, game)">
+          {{ player.score }}
+        </div>
+      </ion-title>
+    </ion-toolbar>
+  </ng-container>
 </ion-header>
 
 <ion-content>

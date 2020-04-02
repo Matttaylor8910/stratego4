@@ -33,7 +33,7 @@ export const onCreateMove =
           });
 
           // determine the player and fetch their position
-          const player =
+          const myPlayer =
               game.board!.players.find(p => p.userId === move.userId);
           const posRef = gameRef!.collection('positions').doc(move.userId);
           const posSnapshot = await posRef.get();
@@ -66,7 +66,7 @@ export const onCreateMove =
               batch.update(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete player!.coordinates[toKey];
+              delete myPlayer!.coordinates[toKey];
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
@@ -74,8 +74,8 @@ export const onCreateMove =
               batch.update(posRef, playerPosition);
 
               // update my player coordinates
-              delete player!.coordinates[fromKey];
-              player!.coordinates[toKey] = '';
+              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[toKey] = '';
             }
 
             // if they won, I just die
@@ -87,7 +87,7 @@ export const onCreateMove =
               batch.update(posRef, playerPosition);
 
               // delete my player coordinates
-              delete player!.coordinates[fromKey];
+              delete myPlayer!.coordinates[fromKey];
             }
 
             // if we tie, both die
@@ -106,7 +106,7 @@ export const onCreateMove =
               batch.update(posRef, playerPosition);
 
               // delete my player coordinates
-              delete player!.coordinates[fromKey];
+              delete myPlayer!.coordinates[fromKey];
             }
 
             // we captured the flag!!!
@@ -120,7 +120,7 @@ export const onCreateMove =
               batch.update(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete player!.coordinates[toKey];
+              delete myPlayer!.coordinates[toKey];
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
@@ -128,8 +128,8 @@ export const onCreateMove =
               batch.update(posRef, playerPosition);
 
               // update my player coordinates
-              delete player!.coordinates[fromKey];
-              player!.coordinates[toKey] = '';
+              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[toKey] = '';
             }
           }
 
@@ -143,8 +143,8 @@ export const onCreateMove =
             batch.update(posRef, playerPosition);
 
             // update my player coordinates
-            delete player!.coordinates[fromKey];
-            player!.coordinates[toKey] = '';
+            delete myPlayer!.coordinates[fromKey];
+            myPlayer!.coordinates[toKey] = '';
           }
 
           // update the game

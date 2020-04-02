@@ -117,6 +117,8 @@ export class GameplayService {
    * Send a move to Firestore
    */
   private makeMove(gameId: string, move: Move) {
+    this.selectedCell = undefined;
+    this.availableMoves = {};
     return this.afs.collection('games').doc(gameId).collection('moves').add(
         move);
   }

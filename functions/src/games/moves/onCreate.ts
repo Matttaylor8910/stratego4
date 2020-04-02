@@ -1,3 +1,4 @@
+import {firestore} from 'firebase';
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
@@ -47,7 +48,8 @@ export const onCreateMove =
           // if enemy, determine winner, delete the other
           if (enemies.hasOwnProperty(toKey)) {
             const enemyUserId = enemies[toKey];
-            const enemyRef = gameRef!.collection('positions').doc(enemyUserId);
+            const enemyRef =
+                gameRef!.collection('positions').doc(enemyUserId as string);
             const enemySnapshot = await enemyRef.get();
             const enemyPosition = enemySnapshot.data() as CoordinateMap;
             const enemyPlayer =
@@ -62,19 +64,19 @@ export const onCreateMove =
               console.log('win');
 
               // update their position
-              delete enemyPosition[toKey];
+              enemyPosition[toKey] = firestore.FieldValue.delete();
               batch.update(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete enemyPlayer!.coordinates[toKey];
+              enemyPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
-              delete playerPosition[fromKey];
+              playerPosition[fromKey] = firestore.FieldValue.delete();
               batch.update(posRef, playerPosition);
 
               // update my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
               myPlayer!.coordinates[toKey] = '';
             }
 
@@ -83,11 +85,11 @@ export const onCreateMove =
               console.log('lose');
 
               // delete my position
-              delete playerPosition[fromKey];
+              playerPosition[fromKey] = firestore.FieldValue.delete();
               batch.update(posRef, playerPosition);
 
               // delete my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
             }
 
             // if we tie, both die
@@ -95,18 +97,18 @@ export const onCreateMove =
               console.log('tie');
 
               // delete their position
-              delete enemyPosition[toKey];
+              enemyPosition[toKey] = firestore.FieldValue.delete();
               batch.update(enemyRef, enemyPosition);
 
               // delete their player coordinates
-              delete enemyPlayer!.coordinates[toKey];
+              enemyPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
 
               // delete my position
-              delete playerPosition[fromKey];
+              playerPosition[fromKey] = firestore.FieldValue.delete();
               batch.update(posRef, playerPosition);
 
               // delete my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
             }
 
             // we captured the flag!!!
@@ -116,19 +118,19 @@ export const onCreateMove =
               // TODO: update capture points +15, eliminate that player
 
               // update their position
-              delete enemyPosition[toKey];
+              enemyPosition[toKey] = firestore.FieldValue.delete();
               batch.update(enemyRef, enemyPosition);
 
               // update their player coordinates
-              delete myPlayer!.coordinates[toKey];
+              myPlayer!.coordinates[toKey] = firestore.FieldValue.delete();
 
               // update my position
               playerPosition[toKey] = playerPosition[fromKey];
-              delete playerPosition[fromKey];
+              playerPosition[fromKey] = firestore.FieldValue.delete();
               batch.update(posRef, playerPosition);
 
               // update my player coordinates
-              delete myPlayer!.coordinates[fromKey];
+              myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
               myPlayer!.coordinates[toKey] = '';
             }
           }
@@ -139,11 +141,11 @@ export const onCreateMove =
 
             // update my position
             playerPosition[toKey] = playerPosition[fromKey];
-            delete playerPosition[fromKey];
+            playerPosition[fromKey] = firestore.FieldValue.delete();
             batch.update(posRef, playerPosition);
 
             // update my player coordinates
-            delete myPlayer!.coordinates[fromKey];
+            myPlayer!.coordinates[fromKey] = firestore.FieldValue.delete();
             myPlayer!.coordinates[toKey] = '';
           }
 

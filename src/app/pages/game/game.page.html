@@ -6,6 +6,11 @@
     <ion-title *ngIf="game$ | async as game">
       {{ game.name }}
     </ion-title>
+    <ion-buttons slot="end" *ngIf="game$ | async as game">
+      <ion-button color="primary" fill="clear">
+        Turn {{ game?.state?.turn + 1}}
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 

@@ -41,7 +41,7 @@ export class GamePage implements OnDestroy {
   }
 
   backgroundColor(player, game) {
-    return '#eee';
+    return game.board.players.find(p => p.userId === player.userId).color;
   }
 
   /**

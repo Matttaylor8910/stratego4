@@ -1,7 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {AuthService} from 'src/app/services/auth.service';
+import {GameplayService} from 'src/app/services/gameplay.service';
 import {PlacementService} from 'src/app/services/placement.service';
-import {Game, Map, PlayerPosition} from 'types';
+import {Game, Map, Piece, PlayerPosition} from 'types';
 
 @Component({
   selector: 'str-game-tile',
@@ -16,6 +17,7 @@ export class GameTileComponent {
 
   constructor(
       public readonly placementService: PlacementService,
+      private readonly gameplayService: GameplayService,
       private readonly authService: AuthService,
   ) {}
 
@@ -30,7 +32,17 @@ export class GameTileComponent {
     return `${max}px`;
   }
 
+  get availableMove(): boolean {
+    return this.gameplayService.availableMoves.hasOwnProperty(
+        `${this.row},${this.col}`);
+  }
+
   get selectable(): boolean {
+    // you can select available moves
+    if (this.availableMove) {
+      return true;
+    }
+    // or your own pieces
     if (this.currentPlayer) {
       return this.currentPlayer.coordinates.hasOwnProperty(
           `${this.row},${this.col}`);
@@ -57,7 +69,15 @@ export class GameTileComponent {
   }
 
   get selected(): boolean {
-    const {row = -1, col = -1} = this.placementService.selectedCell || {};
+    let row, col;
+    if (this.gamePhase === 'placement' && this.placementService.selectedCell) {
+      row = this.placementService.selectedCell.row;
+      col = this.placementService.selectedCell.col;
+    } else if (
+        this.gamePhase === 'playing' && this.gameplayService.selectedCell) {
+      row = this.gameplayService.selectedCell.row;
+      col = this.gameplayService.selectedCell.col;
+    }
     return row === this.row && col === this.col;
   }
 
@@ -102,10 +122,9 @@ export class GameTileComponent {
     if (this.gamePhase === 'placement') {
       this.placementService.selectCell(coordinate);
     }
-
     if (this.gamePhase === 'playing') {
-      // Highlight if it is your piece
-      // (Then click on a new game tile to move)
+      this.gameplayService.selectCell(
+          this.label as Piece, coordinate, this.game);
     }
 
     // Depending on the phase of the game, this might do many things??

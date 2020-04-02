@@ -54,9 +54,7 @@ export interface PlayerPosition {
 export interface Move {
   from: Coordinate;
   to: Coordinate;
-  rank: string;
   userId: string;
-  createdAt: number;
 }
 
 // /games/{gameId}/requests/{docId}
